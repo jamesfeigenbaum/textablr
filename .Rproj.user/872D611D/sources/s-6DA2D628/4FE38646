@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1527533060191.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "4FE38646",
+    "lastKnownWriteTime" : 1527533079,
+    "last_content_update" : 1527533079045,
+    "path" : "/Volumes/Seagate/Dropbox/Research/_KnowledgeBase/estout/R/sumstat.R",
+    "project_path" : "R/sumstat.R",
+    "properties" : {
+        "cursorPosition" : "13,0",
+        "scrollLine" : "38",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

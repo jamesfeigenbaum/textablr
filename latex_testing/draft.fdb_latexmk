@@ -1,5 +1,5 @@
 # Fdb version 3
-["pdflatex"] 1527529687 "draft.tex" "draft.pdf" "draft" 1527529688
+["pdflatex"] 1527529976 "draft.tex" "draft.pdf" "draft" 1527529977
   "/usr/local/texlive/2016/texmf-dist/fonts/map/fontname/texfonts.map" 1272929888 3287 e6b82fe08f5336d4d5ebc73fb1152e87 ""
   "/usr/local/texlive/2016/texmf-dist/fonts/tfm/public/cm/cmbx9.tfm" 1136768653 1328 5442e22a7072966dbaf88ca900acf3f0 ""
   "/usr/local/texlive/2016/texmf-dist/fonts/tfm/public/cm/cmmi10.tfm" 1136768653 1528 abec98dbc43e172678c11b3b9031252a ""
@@ -103,14 +103,14 @@
   "/usr/local/texlive/2016/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1473970562 1888048 f2c5faed5981a516f406b2ccc20bff71 ""
   "/usr/local/texlive/2016/texmf-var/web2c/pdftex/pdflatex.fmt" 1463979169 3873397 413fbfbbedb8e719ddc392043a7add02 ""
   "/usr/local/texlive/2016/texmf.cnf" 1463979140 577 2938757e76f31531e65cc647e3507693 ""
-  "draft.aux" 1527529688 1396 024eef92ad3777620de0e4a2a7a826f8 ""
-  "draft.out" 1527529687 0 d41d8cd98f00b204e9800998ecf8427e ""
-  "draft.tex" 1527529683 13088 b047b89ae4bf93136f5cd1f52e57f9cf ""
+  "draft.aux" 1527529977 1396 024eef92ad3777620de0e4a2a7a826f8 ""
+  "draft.out" 1527529977 0 d41d8cd98f00b204e9800998ecf8427e ""
+  "draft.tex" 1527529973 13087 e68563691951fc566b0d82dc93987077 ""
   "estout_tables.tex" 1527525040 5621 bf307ae5a38c7193202120772dbf93b4 ""
   "table1.tex" 1527529133 1462 4f352bd09254be46dc5c87214cbd0343 ""
-  "table_probit.tex" 1527529674 1107 847d011e46c6cb762d38695b4df3c82d ""
+  "table_logit.tex" 1527529966 1105 bd72fe401924a9eb5ea597c89824d980 ""
   (generated)
   "draft.pdf"
-  "draft.out"
-  "draft.log"
   "draft.aux"
+  "draft.log"
+  "draft.out"

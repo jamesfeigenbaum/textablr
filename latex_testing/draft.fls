@@ -177,8 +177,8 @@ INPUT /usr/local/texlive/2016/texmf-dist/fonts/tfm/public/cm/cmbx9.tfm
 INPUT /usr/local/texlive/2016/texmf-var/fonts/map/pdftex/updmap/pdftex.map
 INPUT table1.tex
 INPUT table1.tex
-INPUT table_probit.tex
-INPUT table_probit.tex
+INPUT table_logit.tex
+INPUT table_logit.tex
 INPUT draft.aux
 INPUT ./draft.out
 INPUT ./draft.out

@@ -17,28 +17,28 @@ library(rdrobust)
 
 reg1 <-
   mtcars %>%
-  glm(data = ., vs ~ wt, family = binomial(link = "probit"))
+  glm(data = ., vs ~ wt, family = binomial(link = "logit"))
 
 reg2 <-
   mtcars %>%
-  glm(data = ., vs ~ hp, family = binomial(link = "probit"))
+  glm(data = ., vs ~ hp, family = binomial(link = "logit"))
 
 reg3 <-
   mtcars %>%
   filter(gear == 4) %>%
-  glm(data = ., vs ~ am, family = binomial(link = "probit"))
+  glm(data = ., vs ~ am, family = binomial(link = "logit"))
 
 reg4 <-
   mtcars %>%
-  glm(data = ., vs ~ wt + hp + am + as.factor(cyl), family = binomial(link = "probit"))
+  glm(data = ., vs ~ wt + hp + am + as.factor(cyl), family = binomial(link = "logit"))
 
 reg5 <-
   mtcars %>%
-  glm(data = ., vs ~ hp, family = binomial(link = "probit"))
+  glm(data = ., vs ~ hp, family = binomial(link = "logit"))
 
 reg6 <-
   mtcars %>%
-  glm(data = ., vs ~ hp + as.factor(cyl), family = binomial(link = "probit"))
+  glm(data = ., vs ~ hp + as.factor(cyl), family = binomial(link = "logit"))
 
 # input
 
@@ -243,4 +243,4 @@ out_table <- c(
 # TODO
 # if the following row has a midrule, remove the previous addlinespace
 
-cat(out_table, file = "latex_testing/table_probit.tex", sep = "\n")
+cat(out_table, file = "latex_testing/table_logit.tex", sep = "\n")
