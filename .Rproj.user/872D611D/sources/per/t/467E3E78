@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1527537866454.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2392820293",
+    "id" : "467E3E78",
+    "lastKnownWriteTime" : 1527539673,
+    "last_content_update" : 1527539673800,
+    "path" : "/Volumes/Seagate/Dropbox/Research/_KnowledgeBase/estout/R/sumstat_rdrobust.R",
+    "project_path" : "R/sumstat_rdrobust.R",
+    "properties" : {
+        "cursorPosition" : "40,19",
+        "scrollLine" : "6",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 7,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

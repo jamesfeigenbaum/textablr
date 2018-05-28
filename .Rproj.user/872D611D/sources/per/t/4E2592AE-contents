@@ -21,7 +21,7 @@ x_fe_master <- function(regs, var_labels = NULL, var_indicates = NULL, var_omits
     # extract with tidy
     # merge on labels or omit codes and order
     reg_table <-
-      map_dfr(regs, tidy, .id = "reg_number") %>%
+      map_dfr(regs, tidy, .id = "reg_number", fe = TRUE) %>%
       as.tibble() %>%
       mutate(reg_number = reg_number %>% as.numeric()) %>%
       rownames_to_column(var = "rownumber") %>%

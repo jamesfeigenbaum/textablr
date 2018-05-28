@@ -4,6 +4,7 @@ library(stringr)
 library(magrittr)
 library(purrr)
 library(data.table)
+library(jjfPkg)
 
 # compare with stargazer
 library(stargazer)
@@ -14,59 +15,41 @@ library(rdrobust)
 
 rm(list = ls())
 
-# create dummy data for linear regression
-# use mtcars
+x <- runif(1000, -5, 5)
+y <- 5 + 2*x + 3*(x >= 0) + rnorm(1000)
+dt <- tibble(x = x, y = y)
 
-reg1 <-
-  mtcars %>%
-  lm(data = ., mpg ~ wt)
+ggplot(dt, aes(x = x, y = y, group = (x>0))) +
+  geom_point(alpha = .1) +
+  geom_smooth(se = FALSE) +
+  geom_vline(xintercept = 0, color = "red", linetype = "dashed") +
+  theme_jjf()
 
-reg2 <-
-  mtcars %>%
-  lm(data = ., mpg ~ hp)
+# create dummy data for RD
 
-reg3 <-
-  mtcars %>%
-  filter(gear == 4) %>%
-  lm(data = ., mpg ~ am)
-
-reg4 <-
-  mtcars %>%
-  lm(data = ., mpg ~ wt + hp + am + as.factor(cyl))
-
-reg5 <-
-  mtcars %>%
-  lm(data = ., wt ~ hp)
-
-reg6 <-
-  mtcars %>%
-  lm(data = ., wt ~ hp + as.factor(cyl))
+reg1 <- rdrobust(dt$y, dt$x, )
+reg2 <- rdrobust(dt$y, dt$x, p = 2)
+reg3 <- rdrobust(dt$y, dt$x, kernel = "epanechnikov")
+reg4 <- rdrobust(dt$y, dt$x, kernel = "uniform")
 
 # input
 
 # function will take regressions as a list of list objects
-regs <- list(reg1, reg2, reg3, reg4, reg5, reg6)
+regs <- list(reg1, reg2, reg3, reg4)
 
-# one optional parameter will be a tibble with variables and labels
-var_labels <- tibble(term = c("wt", "hp"),
-                     label = c("Weight", "Horsepower"))
-
-# which variables to omit?
-var_omits <- c("(Intercept)")
-
-# which variables to indicate yes no
-# so they aren't omitted but the coefficients aren't there
-var_indicates <- tibble(term = c("am", "cyl"), indicator = c("Transmission FE", "Cylinders FE"))
-# var_indicates <- NULL
+# one optional parameter will be the name of the running variable
+var_labels <- "Running Variable X"
 
 # which summary stats to include?
-sumstat_include <- c("N", "aR2", "Ymean")
+sumstat_include <- c("N", "h_l", "h_r", "b_l", "b_r", "N_h_l", "N_h_r", "c", "p", "q",
+                     "kernel", "vce", "bwselect")
 
 source("R/lookups.R")
 
 # we're going to extract some things right from regs
 # but other things from the list of summaries
-regs_summary <- map(regs, summary)
+# regs_summary <- map(regs, summary)
+# doesn't work for rdrobust
 
 # simple stuff
 # all with the prefix regs_
@@ -82,8 +65,8 @@ reg_calls <- map(regs, extract2, c("call")) %>%
   as.character()
 
 # summary statistics
-source("R/sumstat.R")
-out_sumstats <- sumstat_master(regs, sumstat_include, sumstat_names)
+source("R/sumstat_rdrobust.R")
+out_sumstats <- sumstat_master(regs, sumstat_include, sumstat_names_rdrobust)
 
 source("R/coeffs.R")
 out_x_fe <- x_fe_master(regs, var_labels, var_indicates, var_omits)
