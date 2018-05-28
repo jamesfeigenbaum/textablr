@@ -1,0 +1,246 @@
+% *****************************************************************
+% Estout related things
+% http://www.jwe.cc/2012/03/stata-latex-tables-estout/
+% *****************************************************************
+
+%\newcommand{\sym}[1]{\rlap{#1}}% Thanks to David Carlisle
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\let\estinput=\input% define a new input command so that we can still flatten the document
+
+% classic functions
+% estwide and estalt
+% don't let you specify the model titles, panel title, etc
+
+\newcommand{\estwideclassic}[3]{
+  \vspace{.75ex}{
+    \begin{tabular*}
+      {\textwidth}{@{\hskip\tabcolsep\extracolsep\fill}l*{#2}{#3}}
+      \toprule
+      \estinput{#1}
+      \bottomrule
+      \addlinespace[.75ex]
+    \end{tabular*}
+  }
+}
+
+\newcommand{\estautoclassic}[3]{
+  \vspace{.75ex}{
+    \begin{tabular}{l*{#2}{#3}}
+      \toprule
+      \estinput{#1}
+      \bottomrule
+      \addlinespace[.75ex]
+    \end{tabular}
+  }
+}
+
+% augmented functions allow you to specify the model titles
+% but are not designed for multiple panels (tables stacked on top of eachother)
+
+\newcommand{\estauto}[4]{
+  \vspace{.75ex}{
+    \begin{tabular}{l*{#2}{#3}}
+      \toprule
+      #4
+      \estinput{#1}
+      \bottomrule
+      \addlinespace[.75ex]
+    \end{tabular}
+  }
+}
+
+\newcommand{\estwide}[4]{
+  \vspace{.75ex}{
+    \begin{tabular*}
+      {\textwidth}{@{\hskip\tabcolsep\extracolsep\fill}l*{#2}{#3}}
+      \toprule
+      #4
+      \estinput{#1}
+      \bottomrule
+      \addlinespace[1.75ex]
+    \end{tabular*}
+  }
+}
+
+% panel functions
+
+\newcommand{\estautopanel}[6]{
+  \vspace{.75ex}{
+    \begin{tabular}{l*{#2}{#3}}
+      \toprule
+      &\multicolumn{#2}{c}{#4}\\\cmidrule(lr){#5}
+      #6
+      \estinput{#1}
+      \bottomrule
+      \addlinespace[.75ex]
+    \end{tabular}
+  }
+}
+
+\newcommand{\estwidepanel}[6]{
+  \vspace{.75ex}{
+    \begin{tabular*}
+      {\textwidth}{@{\hskip\tabcolsep\extracolsep\fill}l*{#2}{#3}}
+      \toprule
+      &\multicolumn{#2}{c}{#4}\\\cmidrule(lr){#5}
+      #6
+      \estinput{#1}
+      \bottomrule
+      \addlinespace[1.75ex]
+    \end{tabular*}
+  }
+}
+
+% panel top middle and bottoms
+
+\newcommand{\estautopaneltop}[6]{
+  \vspace{.75ex}{
+    \begin{tabular}{l*{#2}{#3}}
+      \toprule
+      &\multicolumn{#2}{c}{#4}\\\cmidrule(lr){#5}
+      #6
+      \estinput{#1}
+      \addlinespace[.75ex]
+    \end{tabular}
+  }
+}
+
+\newcommand{\estautopanelmiddle}[6]{
+  \vspace{.75ex}{
+    \begin{tabular}{l*{#2}{#3}}
+      &\multicolumn{#2}{c}{#4}\\\cmidrule(lr){#5}
+      #6
+      \estinput{#1}
+      \addlinespace[.75ex]
+    \end{tabular}
+  }
+}
+
+\newcommand{\estautopanelbottom}[6]{
+  \vspace{.75ex}{
+    \begin{tabular}{l*{#2}{#3}}
+      &\multicolumn{#2}{c}{#4}\\\cmidrule(lr){#5}
+      #6
+      \estinput{#1}
+      \bottomrule
+      \addlinespace[.75ex]
+    \end{tabular}
+  }
+}
+
+\newcommand{\estwidepaneltop}[6]{
+  \vspace{.75ex}{
+    \begin{tabular*}
+      {\textwidth}{@{\hskip\tabcolsep\extracolsep\fill}l*{#2}{#3}}
+      \toprule
+      &\multicolumn{#2}{c}{#4}\\\cmidrule(lr){#5}
+      #6
+      \estinput{#1}
+      \addlinespace[1.75ex]
+    \end{tabular*}
+  }
+}
+
+\newcommand{\estwidepanelmiddle}[6]{
+  \vspace{.75ex}{
+    \begin{tabular*}
+      {\textwidth}{@{\hskip\tabcolsep\extracolsep\fill}l*{#2}{#3}}
+      &\multicolumn{#2}{c}{#4}\\\cmidrule(lr){#5}
+      #6
+      \estinput{#1}
+      \addlinespace[.75ex]
+    \end{tabular*}
+  }
+}
+
+\newcommand{\estwidepanelbottom}[6]{
+  \vspace{.75ex}{
+    \begin{tabular*}
+      {\textwidth}{@{\hskip\tabcolsep\extracolsep\fill}l*{#2}{#3}}
+      &\multicolumn{#2}{c}{#4}\\\cmidrule(lr){#5}
+      #6
+      \estinput{#1}
+      \bottomrule
+      \addlinespace[.75ex]
+    \end{tabular*}
+  }
+}
+
+% beamer tables
+% should never be stacked panels
+
+\newcommand{\estautobeamer}[4]{
+  \vspace{.75ex}{
+    \begin{tabular}{l*{#2}{#3}}
+      #4
+      \estinput{#1}
+      \addlinespace[.75ex]
+    \end{tabular}
+  }
+}
+
+\newcommand{\estwidebeamer}[4]{
+  \vspace{.75ex}{
+    \begin{tabular*}
+      {\textwidth}{@{\hskip\tabcolsep\extracolsep\fill}l*{#2}{#3}}
+      #4
+      \estinput{#1}
+      \addlinespace[1.75ex]
+    \end{tabular*}
+  }
+}
+
+% Allow line breaks with \\ in specialcells
+\newcommand{\specialcell}[2][c]{%
+\begin{tabular}[#1]{@{}c@{}}#2\end{tabular}}
+
+% *****************************************************************
+% Custom subcaptions
+% *****************************************************************
+
+\usepackage{threeparttable}
+
+% Note/Source/Text after Tables
+\newcommand{\Figtext}[1]{%
+  \begin{tablenotes}[para,flushleft]
+  \hspace{6pt}
+  \hangindent=1.75em
+  #1
+  \end{tablenotes}
+}
+
+\newcommand{\Fignote}[1]{\Figtext{\emph{Note:~}~#1}}
+\newcommand{\Figsource}[1]{\Figtext{\emph{Source:~}~#1}}
+\newcommand{\Figsources}[1]{\Figtext{\emph{Sources:~}~#1}}
+\newcommand{\Starnote}{\Figtext{* $p < 0.1$, ** $p < 0.05$, *** $p < 0.01$}}% Add significance note with \starnote
+
+
+% *****************************************************************
+% siunitx helps line things up in tables
+% *****************************************************************
+
+% centering in tables
+\usepackage{siunitx}
+\sisetup{
+  %detect-mode,
+  tight-spacing		= true,
+  group-digits		= false ,
+  input-signs		= ,
+  input-symbols		= ( ) [ ] - + *,
+  input-open-uncertainty	= ,
+  input-close-uncertainty	= ,
+  table-align-text-post	= false
+}
+
+% *****************************************************************
+% Wider command to fit big tables
+% *****************************************************************
+
+\newcommand\Wider[2][3em]{%
+  \makebox[\linewidth][c]{%
+    \begin{minipage}{\dimexpr\textwidth+#1\relax}
+    \raggedright#2
+    \end{minipage}%
+  }%
+}

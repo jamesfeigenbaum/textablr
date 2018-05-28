@@ -1,0 +1,305 @@
+\documentclass[11pt,english]{article}
+
+\usepackage[latin9]{inputenc}
+
+\usepackage[letterpaper]{geometry}
+\geometry{verbose, tmargin=1.25in, bmargin=1.25in, lmargin=1.25in, rmargin=1.25in}
+
+\usepackage{babel}
+\usepackage{graphicx}
+\usepackage[authoryear]{natbib}
+\usepackage[font=footnotesize,labelfont=bf]{caption}
+\usepackage{subcaption}
+\usepackage{setspace}
+\usepackage{blindtext}
+
+% \usepackage[all=normal,sections,mathspacing]{savetrees}
+
+\doublespacing
+
+\usepackage[unicode=true,
+  bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
+  breaklinks=false,pdfborder={0 0 0},backref=false,colorlinks=false]
+{hyperref}
+\hypersetup{
+pdfauthor={James Feigenbaum}}
+
+\makeatletter
+
+\usepackage{natbib}
+\bibpunct{(}{)}{;}{a}{}{,}
+
+\usepackage{booktabs}
+\usepackage{epstopdf}
+% \usepackage[nolists]{endfloat}
+
+% load the estout code
+\input{estout_tables}
+
+\makeatother
+
+\begin{document}
+
+\title{Table Making with Estauto and Estwide}
+
+\author{James J. Feigenbaum\thanks{Boston University and NBER, email:
+\texttt{\href{mailto:jamesf@bu.edu}{jamesf@bu.edu}}.
+}}
+
+\maketitle
+
+% \section{$estauto$ Tables}
+
+\begin{table}
+  \scriptsize \centering
+  \begin{threeparttable}
+    \caption{Regular Estauto}
+
+    \estauto{table1.tex}{6}{S}
+    {
+      &\multicolumn{3}{c}{White}&\multicolumn{3}{c}{Black}\\
+      \cmidrule(lr){2-4}\cmidrule(lr){5-7}
+      &\multicolumn{1}{c}{Women}&\multicolumn{1}{c}{Men}&\multicolumn{1}{c}{All}
+      &\multicolumn{1}{c}{Women}&\multicolumn{1}{c}{Men}&\multicolumn{1}{c}{All}\\
+      \cmidrule(lr){2-2}\cmidrule(lr){3-3}\cmidrule(lr){4-4}
+      \cmidrule(lr){5-5}\cmidrule(lr){6-6}\cmidrule(lr){7-7}
+    }
+
+    \Starnote
+    % \Fignote{}
+    \label{estauto}
+  \end{threeparttable}
+\end{table}
+
+\pagebreak
+
+\begin{table}
+  \scriptsize \centering
+  \begin{threeparttable}
+    \caption{Regular Estauto with Panel Title}
+
+    \estautopanel{table1.tex}{6}{S}
+    {Panel: Probability Better Off Than Parents}{2-7}
+    {
+      &\multicolumn{3}{c}{White}&\multicolumn{3}{c}{Black}\\
+      \cmidrule(lr){2-4}\cmidrule(lr){5-7}
+      &\multicolumn{1}{c}{Women}&\multicolumn{1}{c}{Men}&\multicolumn{1}{c}{All}
+      &\multicolumn{1}{c}{Women}&\multicolumn{1}{c}{Men}&\multicolumn{1}{c}{All}\\
+      \cmidrule(lr){2-2}\cmidrule(lr){3-3}\cmidrule(lr){4-4}
+      \cmidrule(lr){5-5}\cmidrule(lr){6-6}\cmidrule(lr){7-7}
+    }
+
+    \Starnote
+    \label{estauto_panel}
+  \end{threeparttable}
+\end{table}
+
+% \pagebreak
+%
+% \begin{table}
+%   \scriptsize \centering
+%   \begin{threeparttable}
+%     \caption{A Two Panel Table with Estauto}
+%
+%     \estautopaneltop{dummy_tables/reg_6.tex}{6}{S[table-format=2.3]}
+%     {Panel A: Probability Better Off Than Parents}{2-7}
+%     {
+%       &\multicolumn{3}{c}{White}&\multicolumn{3}{c}{Black}\\
+%       \cmidrule(lr){2-4}\cmidrule(lr){5-7}
+%       &\multicolumn{1}{c}{Women}&\multicolumn{1}{c}{Men}&\multicolumn{1}{c}{All}
+%       &\multicolumn{1}{c}{Women}&\multicolumn{1}{c}{Men}&\multicolumn{1}{c}{All}\\
+%       \cmidrule(lr){2-2}\cmidrule(lr){3-3}\cmidrule(lr){4-4}
+%       \cmidrule(lr){5-5}\cmidrule(lr){6-6}\cmidrule(lr){7-7}
+%     }
+%
+%     \estautopanelbottom{dummy_tables/reg_6.tex}{6}{S[table-format=2.3]}
+%     {Panel B: Gains Relative to Parents}{2-7}
+%     {
+%       &\multicolumn{3}{c}{White}&\multicolumn{3}{c}{Black}\\
+%       \cmidrule(lr){2-4}\cmidrule(lr){5-7}
+%       &\multicolumn{1}{c}{Women}&\multicolumn{1}{c}{Men}&\multicolumn{1}{c}{All}
+%       &\multicolumn{1}{c}{Women}&\multicolumn{1}{c}{Men}&\multicolumn{1}{c}{All}\\
+%       \cmidrule(lr){2-2}\cmidrule(lr){3-3}\cmidrule(lr){4-4}
+%       \cmidrule(lr){5-5}\cmidrule(lr){6-6}\cmidrule(lr){7-7}
+%     }
+%     \Starnote
+%     \Fignote{Standard errors clustered by state of birth and year of birth. Suffrage exposure is measured from 0 to 1 as the share of years of childhood (ages 0 to 15) during which birth state had women's suffrage. The sample is limited to American-born individuals because suffrage exposure can only be estimated if state of birth is known. The sample is a 10\% sample of the complete count 1940 census. Parent outcomes are measured as the namescore based on first names. Individual outcomes are measured as occupation scores, based on occupation reported in the 1940 census.}
+%     \label{estauto_panel_2}
+%   \end{threeparttable}
+% \end{table}
+%
+% \pagebreak
+%
+% \begin{table}
+%   \scriptsize \centering
+%   \begin{threeparttable}
+%     \caption{A Three Panel Table with Estauto}
+%
+%     \estautopaneltop{dummy_tables/reg_6.tex}{6}{S[table-format=2.3]}
+%     {Panel A: Probability Better Off Than Parents}{2-7}
+%     {
+%       &\multicolumn{3}{c}{White}&\multicolumn{3}{c}{Black}\\
+%       \cmidrule(lr){2-4}\cmidrule(lr){5-7}
+%       &\multicolumn{1}{c}{Women}&\multicolumn{1}{c}{Men}&\multicolumn{1}{c}{All}
+%       &\multicolumn{1}{c}{Women}&\multicolumn{1}{c}{Men}&\multicolumn{1}{c}{All}\\
+%       \cmidrule(lr){2-2}\cmidrule(lr){3-3}\cmidrule(lr){4-4}
+%       \cmidrule(lr){5-5}\cmidrule(lr){6-6}\cmidrule(lr){7-7}
+%     }
+%
+%     \estautopanelmiddle{dummy_tables/reg_6.tex}{6}{S[table-format=2.3]}
+%     {Panel B: Probability Better Off Than Parents}{2-7}
+%     {
+%       &\multicolumn{3}{c}{White}&\multicolumn{3}{c}{Black}\\
+%       \cmidrule(lr){2-4}\cmidrule(lr){5-7}
+%       &\multicolumn{1}{c}{Women}&\multicolumn{1}{c}{Men}&\multicolumn{1}{c}{All}
+%       &\multicolumn{1}{c}{Women}&\multicolumn{1}{c}{Men}&\multicolumn{1}{c}{All}\\
+%       \cmidrule(lr){2-2}\cmidrule(lr){3-3}\cmidrule(lr){4-4}
+%       \cmidrule(lr){5-5}\cmidrule(lr){6-6}\cmidrule(lr){7-7}
+%     }
+%
+%     \estautopanelbottom{dummy_tables/reg_6.tex}{6}{S[table-format=2.3]}
+%     {Panel C: Gains Relative to Parents}{2-7}
+%     {
+%       &\multicolumn{3}{c}{White}&\multicolumn{3}{c}{Black}\\
+%       \cmidrule(lr){2-4}\cmidrule(lr){5-7}
+%       &\multicolumn{1}{c}{Women}&\multicolumn{1}{c}{Men}&\multicolumn{1}{c}{All}
+%       &\multicolumn{1}{c}{Women}&\multicolumn{1}{c}{Men}&\multicolumn{1}{c}{All}\\
+%       \cmidrule(lr){2-2}\cmidrule(lr){3-3}\cmidrule(lr){4-4}
+%       \cmidrule(lr){5-5}\cmidrule(lr){6-6}\cmidrule(lr){7-7}
+%     }
+%     \Starnote
+%     \Fignote{Standard errors clustered by state of birth and year of birth. Suffrage exposure is measured from 0 to 1 as the share of years of childhood (ages 0 to 15) during which birth state had women's suffrage. The sample is limited to American-born individuals because suffrage exposure can only be estimated if state of birth is known. The sample is a 10\% sample of the complete count 1940 census. Parent outcomes are measured as the namescore based on first names. Individual outcomes are measured as occupation scores, based on occupation reported in the 1940 census.}
+%     \label{estauto_panel_3}
+%   \end{threeparttable}
+% \end{table}
+%
+\pagebreak
+
+% \section{$estwide$ Tables}
+
+\begin{table}
+  \scriptsize \centering
+  \begin{threeparttable}
+    \caption{Regular Estwide}
+
+    \estwide{table_probit.tex}{6}{S}
+    {
+      &\multicolumn{3}{c}{White}&\multicolumn{3}{c}{Black}\\
+      \cmidrule(lr){2-4}\cmidrule(lr){5-7}
+      &\multicolumn{1}{c}{Women}&\multicolumn{1}{c}{Men}&\multicolumn{1}{c}{All}
+      &\multicolumn{1}{c}{Women}&\multicolumn{1}{c}{Men}&\multicolumn{1}{c}{All}\\
+      \cmidrule(lr){2-2}\cmidrule(lr){3-3}\cmidrule(lr){4-4}
+      \cmidrule(lr){5-5}\cmidrule(lr){6-6}\cmidrule(lr){7-7}
+    }
+
+    \Starnote
+    \label{estwide}
+  \end{threeparttable}
+\end{table}
+%
+% \pagebreak
+%
+% \begin{table}
+%   \scriptsize \centering
+%   \begin{threeparttable}
+%     \caption{Regular Estwide with Panel Title}
+%
+%     \estwidepanel{dummy_tables/reg_6.tex}{6}{S}
+%     {Panel: Probability Better Off Than Parents}{2-7}
+%     {
+%       &\multicolumn{3}{c}{White}&\multicolumn{3}{c}{Black}\\
+%       \cmidrule(lr){2-4}\cmidrule(lr){5-7}
+%       &\multicolumn{1}{c}{Women}&\multicolumn{1}{c}{Men}&\multicolumn{1}{c}{All}
+%       &\multicolumn{1}{c}{Women}&\multicolumn{1}{c}{Men}&\multicolumn{1}{c}{All}\\
+%       \cmidrule(lr){2-2}\cmidrule(lr){3-3}\cmidrule(lr){4-4}
+%       \cmidrule(lr){5-5}\cmidrule(lr){6-6}\cmidrule(lr){7-7}
+%     }
+%
+%     \Starnote
+%     \Fignote{Standard errors clustered by state of birth and year of birth. Suffrage exposure is measured from 0 to 1 as the share of years of childhood (ages 0 to 15) during which birth state had women's suffrage. The sample is limited to American-born individuals because suffrage exposure can only be estimated if state of birth is known. The sample is a 10\% sample of the complete count 1940 census. Parent outcomes are measured as the namescore based on first names. Individual outcomes are measured as occupation scores, based on occupation reported in the 1940 census.}
+%     \label{estwide_panel}
+%   \end{threeparttable}
+% \end{table}
+%
+% \pagebreak
+%
+% \begin{table}
+%   \scriptsize \centering
+%   \begin{threeparttable}
+%     \caption{A Two Panel Table with Estwide}
+%
+%     \estwidepaneltop{dummy_tables/reg_6.tex}{6}{S[table-format=2.3]}
+%     {Panel A: Probability Better Off Than Parents}{2-7}
+%     {
+%       &\multicolumn{3}{c}{White}&\multicolumn{3}{c}{Black}\\
+%       \cmidrule(lr){2-4}\cmidrule(lr){5-7}
+%       &\multicolumn{1}{c}{Women}&\multicolumn{1}{c}{Men}&\multicolumn{1}{c}{All}
+%       &\multicolumn{1}{c}{Women}&\multicolumn{1}{c}{Men}&\multicolumn{1}{c}{All}\\
+%       \cmidrule(lr){2-2}\cmidrule(lr){3-3}\cmidrule(lr){4-4}
+%       \cmidrule(lr){5-5}\cmidrule(lr){6-6}\cmidrule(lr){7-7}
+%     }
+%
+%     \estwidepanelbottom{dummy_tables/reg_6.tex}{6}{S[table-format=2.3]}
+%     {Panel B: Gains Relative to Parents}{2-7}
+%     {
+%       &\multicolumn{3}{c}{White}&\multicolumn{3}{c}{Black}\\
+%       \cmidrule(lr){2-4}\cmidrule(lr){5-7}
+%       &\multicolumn{1}{c}{Women}&\multicolumn{1}{c}{Men}&\multicolumn{1}{c}{All}
+%       &\multicolumn{1}{c}{Women}&\multicolumn{1}{c}{Men}&\multicolumn{1}{c}{All}\\
+%       \cmidrule(lr){2-2}\cmidrule(lr){3-3}\cmidrule(lr){4-4}
+%       \cmidrule(lr){5-5}\cmidrule(lr){6-6}\cmidrule(lr){7-7}
+%     }
+%     \Starnote
+%     \Fignote{Standard errors clustered by state of birth and year of birth. Suffrage exposure is measured from 0 to 1 as the share of years of childhood (ages 0 to 15) during which birth state had women's suffrage. The sample is limited to American-born individuals because suffrage exposure can only be estimated if state of birth is known. The sample is a 10\% sample of the complete count 1940 census. Parent outcomes are measured as the namescore based on first names. Individual outcomes are measured as occupation scores, based on occupation reported in the 1940 census.}
+%     \label{estwide_panel_2}
+%   \end{threeparttable}
+% \end{table}
+%
+% \pagebreak
+%
+% \begin{table}
+%   \scriptsize \centering
+%   \begin{threeparttable}
+%     \caption{A Three Panel Table with Estwide}
+%
+%     \estwidepaneltop{dummy_tables/reg_6.tex}{6}{S[table-format=2.3]}
+%     {Panel A: Probability Better Off Than Parents}{2-7}
+%     {
+%       &\multicolumn{3}{c}{White}&\multicolumn{3}{c}{Black}\\
+%       \cmidrule(lr){2-4}\cmidrule(lr){5-7}
+%       &\multicolumn{1}{c}{Women}&\multicolumn{1}{c}{Men}&\multicolumn{1}{c}{All}
+%       &\multicolumn{1}{c}{Women}&\multicolumn{1}{c}{Men}&\multicolumn{1}{c}{All}\\
+%       \cmidrule(lr){2-2}\cmidrule(lr){3-3}\cmidrule(lr){4-4}
+%       \cmidrule(lr){5-5}\cmidrule(lr){6-6}\cmidrule(lr){7-7}
+%     }
+%
+%     \estwidepanelmiddle{dummy_tables/reg_6.tex}{6}{S[table-format=2.3]}
+%     {Panel B: Probability Better Off Than Parents}{2-7}
+%     {
+%       &\multicolumn{3}{c}{White}&\multicolumn{3}{c}{Black}\\
+%       \cmidrule(lr){2-4}\cmidrule(lr){5-7}
+%       &\multicolumn{1}{c}{Women}&\multicolumn{1}{c}{Men}&\multicolumn{1}{c}{All}
+%       &\multicolumn{1}{c}{Women}&\multicolumn{1}{c}{Men}&\multicolumn{1}{c}{All}\\
+%       \cmidrule(lr){2-2}\cmidrule(lr){3-3}\cmidrule(lr){4-4}
+%       \cmidrule(lr){5-5}\cmidrule(lr){6-6}\cmidrule(lr){7-7}
+%     }
+%
+%     \estwidepanelbottom{dummy_tables/reg_6.tex}{6}{S[table-format=2.3]}
+%     {Panel C: Gains Relative to Parents}{2-7}
+%     {
+%       &\multicolumn{3}{c}{White}&\multicolumn{3}{c}{Black}\\
+%       \cmidrule(lr){2-4}\cmidrule(lr){5-7}
+%       &\multicolumn{1}{c}{Women}&\multicolumn{1}{c}{Men}&\multicolumn{1}{c}{All}
+%       &\multicolumn{1}{c}{Women}&\multicolumn{1}{c}{Men}&\multicolumn{1}{c}{All}\\
+%       \cmidrule(lr){2-2}\cmidrule(lr){3-3}\cmidrule(lr){4-4}
+%       \cmidrule(lr){5-5}\cmidrule(lr){6-6}\cmidrule(lr){7-7}
+%     }
+%     \Starnote
+%     \Fignote{Standard errors clustered by state of birth and year of birth. Suffrage exposure is measured from 0 to 1 as the share of years of childhood (ages 0 to 15) during which birth state had women's suffrage. The sample is limited to American-born individuals because suffrage exposure can only be estimated if state of birth is known. The sample is a 10\% sample of the complete count 1940 census. Parent outcomes are measured as the namescore based on first names. Individual outcomes are measured as occupation scores, based on occupation reported in the 1940 census.}
+%     \label{estwide_panel_3}
+%   \end{threeparttable}
+% \end{table}
+%
+% \pagebreak
+
+\end{document}

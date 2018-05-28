@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1527528992998.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3581806469",
+    "id" : "6902B927",
+    "lastKnownWriteTime" : 1527529739,
+    "last_content_update" : 1527529739453,
+    "path" : "/Volumes/Seagate/Dropbox/Research/_KnowledgeBase/estout/R/estout_glm.R",
+    "project_path" : "R/estout_glm.R",
+    "properties" : {
+        "cursorPosition" : "232,16",
+        "scrollLine" : "220",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
