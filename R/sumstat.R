@@ -1,13 +1,26 @@
-# summary statistics
-# all with the prefix sumstat_
-# N, R2, aR2, df, Fstat, Ymean
-
-# put each of these inside an if statement
-# only calculate sumstat_XXX if we want XXX
-# this is good for speed
-# and because some summary stats don't always exist for all regression types
+#' @title Estout to Output Regression Results
+#'
+#' @description Helper function to construct summary statistics
+#'
+#' @param regs stored regression output in a list
+#' @param sumstat_include vector of summary statistics to include
+#' @param sumstat_names tibble from the lookup with summary stats and proper names
+#'
+#' @importFrom purrr map_dfr map_int map_dbl map2
+#' @importFrom broom glance
+#' @importFrom dplyr pull filter arrange
+#' @keywords internal
 
 sumstat_master <- function(regs, sumstat_include = "N", sumstat_names) {
+
+  # summary statistics
+  # all with the prefix sumstat_
+  # N, R2, aR2, df, Fstat, Ymean
+
+  # put each of these inside an if statement
+  # only calculate sumstat_XXX if we want XXX
+  # this is good for speed
+  # and because some summary stats don't always exist for all regression types
 
   # save speed by summarizing now
   regs_summary <- regs %>% map(summary)
@@ -17,30 +30,43 @@ sumstat_master <- function(regs, sumstat_include = "N", sumstat_names) {
     map(lfe:::model.frame.felm) %>%
     map(extract2, 1)
 
+  sumstat_storage <- data.frame(reg_number = 1:dim(regs_glance)[1])
+
   if ("N" %in% sumstat_include) {
     # nobs doesn't work for felm
     # sumstat_N <- map_int(regs, nobs)
-    sumstat_N <- y_vector %>% map_int(length)
+    sumstat_storage <- y_vector %>%
+      map_int(length) %>%
+      tibble("N" = .) %>%
+      bind_cols(sumstat_storage, .)
   }
 
   if ("R2" %in% sumstat_include) {
-    sumstat_R2 <- regs_glance %>%
-      pull(r.squared)
+    sumstat_storage <- regs_glance %>%
+      pull(r.squared) %>%
+      tibble("R2" = .) %>%
+      bind_cols(sumstat_storage, .)
   }
 
   if ("aR2" %in% sumstat_include) {
-    sumstat_aR2 <- regs_glance %>%
-      pull(adj.r.squared)
+    sumstat_storage <- regs_glance %>%
+      pull(adj.r.squared) %>%
+      tibble("aR2" = .) %>%
+      bind_cols(sumstat_storage, .)
   }
 
   if ("df" %in% sumstat_include) {
-    sumstat_df <- regs_glance %>%
-      pull("df.residual")
+    sumstat_storage <- regs_glance %>%
+      pull("df.residual") %>%
+      tibble("df" = .) %>%
+      bind_cols(sumstat_storage, .)
   }
 
   if ("F" %in% sumstat_include) {
-    sumstat_F <- regs_glance %>%
-      pull(statistic)
+    sumstat_storage <- regs_glance %>%
+      pull("statistic") %>%
+      tibble("F" = .) %>%
+      bind_cols(sumstat_storage, .)
   }
 
   if ("Ymean" %in% sumstat_include) {
@@ -49,13 +75,16 @@ sumstat_master <- function(regs, sumstat_include = "N", sumstat_names) {
     #   map(extract2, 1) %>%
     #   map_dbl(mean)
 
-    # but this felm function works for lm
-    sumstat_Ymean <- y_vector %>% map_dbl(mean)
+    # but this felm function works for lm and glm
+    sumstat_storage <- y_vector %>%
+      map_dbl(mean) %>%
+      tibble("Ymean" = .) %>%
+      bind_cols(sumstat_storage, .)
   }
 
-  out_sumstats <- sumstat_include %>%
-    str_c("sumstat_", .) %>%
-    map(dynGet) %>%
+  out_sumstats <- sumstat_storage %>%
+    select(-1) %>%
+    map(1:(length(sumstat_include)), pull, .data = .) %>%
     # surround with \multicolumn{1}{c}{XXX}
     map2(sumstat_names %>%
            filter(code %in% sumstat_include) %>%
@@ -66,7 +95,8 @@ sumstat_master <- function(regs, sumstat_include = "N", sumstat_names) {
     map2(sumstat_names %>%
            filter(code %in% sumstat_include) %>%
            arrange(match(code, sumstat_include)) %>%
-           pull(proper_name), ., c) %>%
+           pull(proper_name) %>%
+           as.character(), ., c) %>%
     map_chr(paste0, collapse = " & ") %>%
     str_c(" \\\\")
 

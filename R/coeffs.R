@@ -1,6 +1,26 @@
+#' @title Estout to Output Regression Results
+#'
+#' @description Helper function to construct summary statistics
+#'
+#' @param regs stored regression output in a list
+#' @param var_labels tibble of variable labels
+#' @param var_indicates tibble of variables to indicate
+#' @param var_omits vector of variables to omit
+#'
+#' @import tibble
+#' @importFrom purrr map_dfr transpose
+#' @import stringr
+#' @importFrom tidyr gather spread
+#' @import dplyr
+#' @importFrom broom tidy
+#'
+#' @keywords internal
+
 # coefficients
 
 x_fe_master <- function(regs, var_labels = NULL, var_indicates = NULL, var_omits = NULL){
+
+    reg_columns <- length(regs)
 
     # if var_lables is null build dummy version
     if (is.null(var_labels)) {
@@ -21,8 +41,8 @@ x_fe_master <- function(regs, var_labels = NULL, var_indicates = NULL, var_omits
     # extract with tidy
     # merge on labels or omit codes and order
     reg_table <-
-      map_dfr(regs, tidy, .id = "reg_number", fe = TRUE) %>%
-      as.tibble() %>%
+      map_dfr(regs, tidy, .id = "reg_number", fe = TRUE, fe.error = FALSE) %>%
+      as_tibble() %>%
       mutate(reg_number = reg_number %>% as.numeric()) %>%
       rownames_to_column(var = "rownumber") %>%
       mutate(rownumber = rownumber %>% as.numeric()) %>%
@@ -33,7 +53,7 @@ x_fe_master <- function(regs, var_labels = NULL, var_indicates = NULL, var_omits
                paste0(collapse = "|") %>%
                str_extract(string = term, pattern = .)) %>%
       left_join(var_indicates, by = c("indicator_term" = "term")) %>%
-      left_join(var_omits %>% as.tibble() %>% rename(term = value) %>% mutate(omit = 1),
+      left_join(var_omits %>% as_tibble() %>% rename(term = value) %>% mutate(omit = 1),
                 by = "term") %>%
       # drop the rows we are omitting
       filter(is.na(omit)) %>%
@@ -45,7 +65,7 @@ x_fe_master <- function(regs, var_labels = NULL, var_indicates = NULL, var_omits
       reg_table %>%
       filter(is.na(indicator)) %>%
       rowwise() %>%
-      mutate(stars = sum(p.value < star_levels)) %>%
+      mutate(sig_stars = sum(p.value < star_levels)) %>%
       ungroup()
 
     reg_table_fe <-
@@ -70,14 +90,14 @@ x_fe_master <- function(regs, var_labels = NULL, var_indicates = NULL, var_omits
     reg_table_varlist <- c(reg_table_x_varlist, reg_table_fe_varlist)
 
     out_x <- expand.grid(label = reg_table_x_varlist, reg_number = 1:reg_columns, stringsAsFactors = FALSE) %>%
-      as.tibble() %>%
+      as_tibble() %>%
       left_join(reg_table_x, by = c("label", "reg_number")) %>%
       # TODO add customization for digits and decimals in beta and se etc
       # add stars
       mutate(estimate_string = estimate %>%
                sprintf("%.2f", .)) %>%
-      mutate(estimate_star = if_else(stars == 0, estimate_string,
-                                     paste0(estimate_string, "\\sym{", strrep("*", stars), "}")
+      mutate(estimate_star = if_else(sig_stars == 0, estimate_string,
+                                     paste0(estimate_string, "\\sym{", strrep("*", sig_stars), "}")
       )) %>%
       # add parentheses to SE
       # TODO use options for SE or t or pvalue
@@ -96,7 +116,7 @@ x_fe_master <- function(regs, var_labels = NULL, var_indicates = NULL, var_omits
     if (reg_table_fe %>% nrow() != 0) {
 
       out_fe <- expand.grid(indicator = reg_table_fe_varlist, reg_number = 1:reg_columns, stringsAsFactors = FALSE) %>%
-        as.tibble() %>%
+        as_tibble() %>%
         left_join(reg_table_fe, by = c("indicator", "reg_number")) %>%
         group_by(indicator, reg_number) %>%
         summarize(count = sum(!is.na(estimate))) %>%

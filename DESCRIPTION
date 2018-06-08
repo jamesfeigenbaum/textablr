@@ -1,11 +1,23 @@
 Package: estout
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Output Regression Results to LaTeX
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Author: James Feigenbaum
+Maintainer: James Feigenbaum <jamesf@bu.edu>
+Description: Custom package to output regression results.
+    This package is inspired by the `estout` package for Stata but will probably only work for me.
+License: GPL-2
 Encoding: UTF-8
 LazyData: true
+Imports:
+  tidyr,
+  dplyr,
+  magrittr, 
+  purrr,
+  tibble,
+  stringr,
+  broom
+Suggests:
+  lfe, 
+  rdrobust
+RoxygenNote: 6.0.1
