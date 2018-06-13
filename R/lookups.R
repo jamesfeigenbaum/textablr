@@ -38,4 +38,4 @@ indicator_levels <- c("Yes", "No")
 # indicator_levels <- c("Included", "Not Included")
 
 # star levels
-star_levels <- c(0.10, 0.05, 0.01)
+star_level_default <- c(0.10, 0.05, 0.01)

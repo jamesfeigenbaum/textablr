@@ -5,7 +5,7 @@
 \title{Compile Regression Coefficients for Output}
 \usage{
 x_fe_master(regs, var_labels = NULL, var_indicates = NULL,
-  var_omits = NULL)
+  var_omits = NULL, star_levels = star_level_default)
 }
 \arguments{
 \item{regs}{stored regression output in a list}
@@ -15,6 +15,8 @@ x_fe_master(regs, var_labels = NULL, var_indicates = NULL,
 \item{var_indicates}{tibble of variables to indicate}
 
 \item{var_omits}{vector of variables to omit}
+
+\item{star_levels}{statistical significance stars}
 }
 \description{
 Helper function to construct coefficients

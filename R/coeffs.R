@@ -6,6 +6,7 @@
 #' @param var_labels tibble of variable labels
 #' @param var_indicates tibble of variables to indicate
 #' @param var_omits vector of variables to omit
+#' @param star_levels statistical significance stars
 #'
 #' @import tibble
 #' @importFrom purrr map_dfr transpose
@@ -18,7 +19,7 @@
 
 # coefficients
 
-x_fe_master <- function(regs, var_labels = NULL, var_indicates = NULL, var_omits = NULL){
+x_fe_master <- function(regs, var_labels = NULL, var_indicates = NULL, var_omits = NULL, star_levels = star_level_default){
 
     reg_columns <- length(regs)
 
@@ -105,10 +106,15 @@ x_fe_master <- function(regs, var_labels = NULL, var_indicates = NULL, var_omits
       select(reg_number, estimate_star, se, label) %>%
       gather(key = "beta_se", value = "value", -reg_number, -label) %>%
       spread(key = reg_number, value = value, sep = "_", fill = "") %>%
+      # order everything based on labels
+      mutate(order2 = row_number()) %>%
+      left_join(var_labels %>% select(label) %>% mutate(order1 = row_number()), by = "label") %>%
+      arrange(order1, order2) %>%
+      select(-order1, -order2) %>%
       mutate(label = if_else(beta_se == "estimate_star", label, "")) %>%
       mutate(line_ender = if_else(beta_se == "estimate_star", "\\\\", "\\\\ \\addlinespace")) %>%
       select(-beta_se) %>%
-      map(extract) %>%
+      map(magrittr::extract) %>%
       purrr::transpose() %>%
       map_chr(paste0, collapse = " & ") %>%
       str_replace("& \\\\", "\\\\")
@@ -128,7 +134,11 @@ x_fe_master <- function(regs, var_labels = NULL, var_indicates = NULL, var_omits
         select(-count) %>%
         ungroup() %>%
         spread(key = reg_number, value = value, sep = "_", fill = "") %>%
-        map(extract) %>%
+        # order everything based on order of indicators
+        left_join(var_indicates %>% select(indicator) %>% mutate(order = row_number()), by = "indicator") %>%
+        arrange(order) %>%
+        select(-order) %>%
+        map(magrittr::extract) %>%
         purrr::transpose() %>%
         map_chr(paste0, collapse = " & ") %>%
         map_chr(paste, "\\\\ \\addlinespace")

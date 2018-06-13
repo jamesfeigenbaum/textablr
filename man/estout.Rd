@@ -5,20 +5,23 @@
 \title{Output Regression Results as a LaTeX Table}
 \usage{
 estout(regs, file = "", var_labels = NULL, var_omits = NULL,
-  var_indicates = NULL, sumstat_include = NULL)
+  var_indicates = NULL, sumstat_include = NULL,
+  star_levels = star_level_default)
 }
 \arguments{
 \item{regs}{stored regression output in a list}
 
 \item{file}{output location, if blank prints to scree}
 
-\item{var_labels}{tibble of variable labels}
+\item{var_labels}{tibble of variable labels, this sets the order of variables in the table}
 
 \item{var_omits}{vector of variables to omit}
 
-\item{var_indicates}{tibble of variables to indicate}
+\item{var_indicates}{tibble of variables to indicate, this sets of the order of indicator variables in the table}
 
 \item{sumstat_include}{vector of summary statistics to include}
+
+\item{star_levels}{vector of cut offs for statistical significance stars, c(0.10, 0.05, 0.01) are the defaults}
 }
 \description{
 Like stata's `estout`, output regression results nicely.

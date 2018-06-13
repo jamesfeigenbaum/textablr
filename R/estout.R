@@ -4,14 +4,15 @@
 #'
 #' @param regs stored regression output in a list
 #' @param file output location, if blank prints to scree
-#' @param var_labels tibble of variable labels
-#' @param var_indicates tibble of variables to indicate
+#' @param var_labels tibble of variable labels, this sets the order of variables in the table
+#' @param var_indicates tibble of variables to indicate, this sets of the order of indicator variables in the table
 #' @param var_omits vector of variables to omit
 #' @param sumstat_include vector of summary statistics to include
+#' @param star_levels vector of cut offs for statistical significance stars, c(0.10, 0.05, 0.01) are the defaults
 #'
 #' @import magrittr
 #' @importFrom purrr map map_chr transpose
-#' @importFrom stringr str_c
+#' @importFrom stringr str_c str_replace_all
 #'
 #' @examples
 #'
@@ -44,9 +45,10 @@
 #'
 #' @export estout
 
-estout <- function(regs, file = "", var_labels = NULL, var_omits = NULL, var_indicates = NULL, sumstat_include = NULL) {
-
-  # source("R/lookups.R")
+estout <- function(regs, file = "",
+                   var_labels = NULL, var_omits = NULL, var_indicates = NULL,
+                   sumstat_include = NULL,
+                   star_levels = star_level_default) {
 
   # we're going to extract some things right from regs
   # but other things from the list of summaries
@@ -66,20 +68,21 @@ estout <- function(regs, file = "", var_labels = NULL, var_omits = NULL, var_ind
     as.character()
 
   # summary statistics
-  # source("R/sumstat.R")
   out_sumstats <- sumstat_master(regs, sumstat_include, sumstat_names)
 
-  # source("R/coeffs.R")
-  out_x_fe <- x_fe_master(regs, var_labels, var_indicates, var_omits)
+  # coefficients and FEs
+  out_x_fe <- x_fe_master(regs, var_labels, var_indicates, var_omits, star_levels)
 
+  # column numbers for output
   out_colnumbers <- 1:reg_columns %>%
     # surround with \multicolumn{1}{c}{XXX}
     sprintf("\\multicolumn{1}{c}{(%s)}", .) %>%
-    map(extract) %>%
+    map(magrittr::extract) %>%
     purrr::transpose() %>%
     map_chr(paste0, collapse = " & ") %>%
     str_c("& ", ., " \\\\")
 
+  # and put the whole output table together
   out_table <- c(
     out_colnumbers,
     "\\midrule",
@@ -87,12 +90,15 @@ estout <- function(regs, file = "", var_labels = NULL, var_omits = NULL, var_ind
     "\\midrule",
     out_sumstats)
 
-  # TODO
-  # if the following row has a midrule, remove the previous addlinespace
-
-  # if file is empty don't cat at all
+  # if file is empty don't cat to a file at all
   if (file != "") {
-    cat(out_table, file = file, sep = "\n")
+
+    out_table %>%
+      # if the following row has a midrule, remove the previous addlinespace
+      paste0(collapse = "\n") %>%
+      str_replace_all("\\\\addlinespace(\n.+midrule)", "\\1") %>%
+      cat(file = file)
+
   }
 
   markdown_table <- tex_to_markdown(out_table) %>%
