@@ -43,14 +43,15 @@ tex_to_markdown <- function(out_table) {
     as.numeric() %>%
     add(2)
 
-  temp1 %>%
+  out <-
+    temp1 %>%
     map(1:columns, pull, .data = .) %>%
     map2_dfc(max_widths, ~ str_pad(.x, width = .y, side = "right")) %>%
-    map(extract) %>%
+    # map(extract) %>%
     purrr::transpose() %>%
     map_chr(paste0, collapse = " ") %>%
-    str_replace_all("midrule.+$", str_dup("-", max_widths %>% sum() %>% add(columns - 1))) %>%
-    cat(sep = "\n") %>%
-    return()
+    str_replace_all("midrule.+$", str_dup("-", max_widths %>% sum() %>% add(columns - 1)))
+
+  return(out)
 
 }

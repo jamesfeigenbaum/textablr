@@ -90,11 +90,14 @@ estout <- function(regs, file = "", var_labels = NULL, var_omits = NULL, var_ind
   # TODO
   # if the following row has a midrule, remove the previous addlinespace
 
-  # "latex_testing/table1.tex"
-  cat(out_table, file = file, sep = "\n")
+  # if file is empty don't cat at all
+  if (file != "") {
+    cat(out_table, file = file, sep = "\n")
+  }
 
-  markdown_table <- tex_to_markdown(out_table)
+  markdown_table <- tex_to_markdown(out_table) %>%
+    cat(sep = "\n")
 
-  print(markdown_table)
+  invisible(out_table)
 
 }
