@@ -2,7 +2,7 @@
 % Please edit documentation in R/tex_to_markdown.R
 \name{tex_to_markdown}
 \alias{tex_to_markdown}
-\title{Estout to Output Regression Results}
+\title{Convert the TeX output to Markdown Table for Printing to Console}
 \usage{
 tex_to_markdown(out_table)
 }

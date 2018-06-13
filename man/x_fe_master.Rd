@@ -2,7 +2,7 @@
 % Please edit documentation in R/coeffs.R
 \name{x_fe_master}
 \alias{x_fe_master}
-\title{Estout to Output Regression Results}
+\title{Compile Regression Coefficients for Output}
 \usage{
 x_fe_master(regs, var_labels = NULL, var_indicates = NULL,
   var_omits = NULL)
@@ -17,6 +17,6 @@ x_fe_master(regs, var_labels = NULL, var_indicates = NULL,
 \item{var_omits}{vector of variables to omit}
 }
 \description{
-Helper function to construct summary statistics
+Helper function to construct coefficients
 }
 \keyword{internal}

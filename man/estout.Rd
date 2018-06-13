@@ -2,7 +2,7 @@
 % Please edit documentation in R/estout.R
 \name{estout}
 \alias{estout}
-\title{Estout to Output Regression Results}
+\title{Output Regression Results as a LaTeX Table}
 \usage{
 estout(regs, file = "", var_labels = NULL, var_omits = NULL,
   var_indicates = NULL, sumstat_include = NULL)

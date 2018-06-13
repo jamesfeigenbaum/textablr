@@ -26,7 +26,8 @@ devtools::install_github("jamesfeigenbaum/textablr")
 
 ### Resources
 
-- J&ouml;rg Weber's Three Part Explanation of `estout` and `LaTeX` tables
-    1. [Automated Table generation in Stata and integration into LaTeX ](http://www.jwe.cc/2012/03/stata-latex-tables-estout/)
-    2. [LaTeX and Stata integration (2): Solving some problems](http://www.jwe.cc/2012/08/latex-and-stata-integration-solving-some-problems/)
-    3. [LaTeX and Stata integration (3): Improving the Design](http://www.jwe.cc/2012/08/latex-stata-design/)
+J&ouml;rg Weber's Three Part Explanation of `estout` and `LaTeX` tables
+
+1. [Automated Table generation in Stata and integration into LaTeX ](http://www.jwe.cc/2012/03/stata-latex-tables-estout/)
+2. [LaTeX and Stata integration (2): Solving some problems](http://www.jwe.cc/2012/08/latex-and-stata-integration-solving-some-problems/)
+3. [LaTeX and Stata integration (3): Improving the Design](http://www.jwe.cc/2012/08/latex-stata-design/)

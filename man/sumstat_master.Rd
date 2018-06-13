@@ -2,7 +2,7 @@
 % Please edit documentation in R/sumstat.R
 \name{sumstat_master}
 \alias{sumstat_master}
-\title{Estout to Output Regression Results}
+\title{Gather Summary Statistics from Regression Results for Output}
 \usage{
 sumstat_master(regs, sumstat_include = "N", sumstat_names)
 }
