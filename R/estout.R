@@ -1,4 +1,4 @@
-#' @title Estout to Output Regression Results
+#' @title Output Regression Results as a LaTeX Table
 #'
 #' @description Like stata's `estout`, output regression results nicely.
 #'

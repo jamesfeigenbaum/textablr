@@ -1,23 +1,25 @@
-Package: estout
+Package: textablr
 Type: Package
 Title: Output Regression Results to LaTeX
-Version: 0.1.0
+Version: 0.2.0
 Author: James Feigenbaum
 Maintainer: James Feigenbaum <jamesf@bu.edu>
 Description: Custom package to output regression results.
-    This package is inspired by the `estout` package for Stata but will probably only work for me.
+    This package is inspired by the `estout` package for Stata but will probably only work for me (stylistically, at least).
+    I had to change the name from `estout` to `textablr` because another `estout` is already on CRAN.
+    Produces tables that are LaTeX fragments, working with the workflow described here: http://www.jwe.cc/2012/03/stata-latex-tables-estout/
 License: GPL-2
 Encoding: UTF-8
 LazyData: true
 Imports:
   tidyr,
   dplyr,
-  magrittr, 
+  magrittr,
   purrr,
   tibble,
   stringr,
   broom
 Suggests:
-  lfe, 
+  lfe,
   rdrobust
 RoxygenNote: 6.0.1

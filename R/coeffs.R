@@ -1,6 +1,6 @@
-#' @title Estout to Output Regression Results
+#' @title Compile Regression Coefficients for Output
 #'
-#' @description Helper function to construct summary statistics
+#' @description Helper function to construct coefficients
 #'
 #' @param regs stored regression output in a list
 #' @param var_labels tibble of variable labels

@@ -1,4 +1,4 @@
-#' @title Estout to Output Regression Results
+#' @title Convert the TeX output to Markdown Table for Printing to Console
 #'
 #' @description Like stata's `estout`, output regression results nicely.
 #'
@@ -54,5 +54,3 @@ tex_to_markdown <- function(out_table) {
     return()
 
 }
-
-

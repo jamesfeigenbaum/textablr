@@ -1,4 +1,4 @@
-#' @title Estout to Output Regression Results
+#' @title Gather Summary Statistics from Regression Results for Output
 #'
 #' @description Helper function to construct summary statistics
 #'

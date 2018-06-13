@@ -1,4 +1,4 @@
-#' @title estout lookups
+#' @title A few simple lookup vectors and tibbles to help with regression output
 #'
 #' @description Helper function to define various lookups
 #'
