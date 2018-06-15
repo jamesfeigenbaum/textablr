@@ -11,7 +11,7 @@
 #' @import tibble
 #' @importFrom purrr map_dfr transpose
 #' @import stringr
-#' @importFrom tidyr gather spread
+#' @importFrom tidyr gather spread unnest
 #' @import dplyr
 #' @importFrom broom tidy
 #'
@@ -39,15 +39,26 @@ x_fe_master <- function(regs, var_labels = NULL, var_indicates = NULL, var_omits
       var_omits <- c("")
     }
 
+    # fes
+    fe_terms <-
+      regs %>%
+      map(magrittr::extract2, "fe") %>%
+      map(names) %>%
+      tibble(reg_number = 1:reg_columns, term = .) %>%
+      # if a regression is not an felm call
+      # term will be NULL
+      filter(!map_lgl(term, is.null)) %>%
+      tidyr::unnest(term) %>%
+      mutate(felm_fe = TRUE)
+
     # extract with tidy
     # merge on labels or omit codes and order
     reg_table <-
-      map_dfr(regs, tidy, .id = "reg_number", fe = TRUE, fe.error = FALSE) %>%
+      map_dfr(regs, tidy, .id = "reg_number", fe = FALSE, fe.error = FALSE) %>%
       as_tibble() %>%
       mutate(reg_number = reg_number %>% as.numeric()) %>%
-      rownames_to_column(var = "rownumber") %>%
-      mutate(rownumber = rownumber %>% as.numeric()) %>%
       left_join(var_labels, by = "term") %>%
+      bind_rows(fe_terms) %>%
       # check against indicator regexs
       mutate(indicator_term = var_indicates %>%
                pull(term) %>%
@@ -74,19 +85,16 @@ x_fe_master <- function(regs, var_labels = NULL, var_indicates = NULL, var_omits
       filter(!is.na(indicator))
 
     reg_table_x_varlist <- reg_table_x %>%
-      select(rownumber, label, term) %>%
+      select(label, term) %>%
       mutate(label = if_else(is.na(label), term, label)) %>%
-      group_by(label) %>%
-      summarize(order = min(rownumber)) %>%
-      arrange(order) %>%
-      pull(label)
+      select(label) %>%
+      distinct() %>%
+      pull()
 
     reg_table_fe_varlist <- reg_table_fe %>%
-      select(rownumber, indicator) %>%
-      group_by(indicator) %>%
-      summarize(order = min(rownumber)) %>%
-      arrange(order) %>%
-      pull(indicator)
+      select(indicator) %>%
+      distinct() %>%
+      pull()
 
     reg_table_varlist <- c(reg_table_x_varlist, reg_table_fe_varlist)
 
@@ -125,7 +133,7 @@ x_fe_master <- function(regs, var_labels = NULL, var_indicates = NULL, var_omits
         as_tibble() %>%
         left_join(reg_table_fe, by = c("indicator", "reg_number")) %>%
         group_by(indicator, reg_number) %>%
-        summarize(count = sum(!is.na(estimate))) %>%
+        summarize(count = sum(!is.na(estimate)) + sum(felm_fe == TRUE, na.rm = TRUE)) %>%
         # yes no
         mutate(value = case_when(count == 0 ~ indicator_levels[2],
                                  count > 0 ~ indicator_levels[1])) %>%

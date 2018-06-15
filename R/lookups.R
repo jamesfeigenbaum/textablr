@@ -10,6 +10,8 @@
 #' @keywords internal
 #'
 
+## LOOKUPS
+
 # summary stat lookup
 # TODO enable custom proper names for summary statistics
 sumstat_names <- data.frame(code = c("N", "Ymean", "R2", "aR2", "df", "F"),
@@ -30,6 +32,11 @@ sumstat_names_rdrobust <-
                          "Kernel", "VCE", "Bandwidth Selection"),
          format = c("%.0f", "%.3f", "%.3f", "%.3f", "%.3f", "%.0f", "%.0f", "%.2f", "%.0f", "%.0f", "%s", "%s", "%s")) %>%
   dplyr::mutate(format = format %>% paste0("\\multicolumn{1}{c}{", ., "}"))
+
+## DEFAULTS
+
+# which summary stats to include if none are specified
+sumstat_include_default <- c("N", "aR2", "Ymean")
 
 # indicator levels
 indicator_levels <- c("Yes", "No")

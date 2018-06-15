@@ -23,12 +23,13 @@ sumstat_master <- function(regs, sumstat_include = "N", sumstat_names) {
   # and because some summary stats don't always exist for all regression types
 
   # save speed by summarizing now
-  regs_summary <- regs %>% map(summary)
+  # regs_summary <- regs %>% map(summary)
+  # actually this is never used...
   regs_glance <- regs %>% map_dfr(glance)
 
   y_vector <- regs %>%
-    map(lfe:::model.frame.felm) %>%
-    map(extract2, 1)
+    map(~ tibble(resid = .x$residuals %>% as.vector(), fitted = .x$fitted.values %>% as.vector(), y = resid + fitted)) %>%
+    map(pull)
 
   sumstat_storage <- data.frame(reg_number = 1:dim(regs_glance)[1])
 

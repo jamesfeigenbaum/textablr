@@ -5,7 +5,7 @@
 \title{Output Regression Results as a LaTeX Table}
 \usage{
 estout(regs, file = "", var_labels = NULL, var_omits = NULL,
-  var_indicates = NULL, sumstat_include = NULL,
+  var_indicates = NULL, sumstat_include = sumstat_include_default,
   star_levels = star_level_default)
 }
 \arguments{

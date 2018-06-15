@@ -47,7 +47,7 @@
 
 estout <- function(regs, file = "",
                    var_labels = NULL, var_omits = NULL, var_indicates = NULL,
-                   sumstat_include = NULL,
+                   sumstat_include = sumstat_include_default,
                    star_levels = star_level_default) {
 
   # we're going to extract some things right from regs
