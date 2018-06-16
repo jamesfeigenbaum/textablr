@@ -9,7 +9,7 @@
 #' @param star_levels statistical significance stars
 #'
 #' @import tibble
-#' @importFrom purrr map_dfr transpose
+#' @importFrom purrr map_dfr map_chr map_lgl transpose
 #' @import stringr
 #' @importFrom tidyr gather spread unnest
 #' @import dplyr
