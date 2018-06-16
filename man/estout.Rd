@@ -19,9 +19,12 @@ estout(regs, file = "", var_labels = NULL, var_omits = NULL,
 
 \item{var_indicates}{tibble of variables to indicate, this sets of the order of indicator variables in the table}
 
-\item{sumstat_include}{vector of summary statistics to include}
+\item{sumstat_include}{vector of summary statistics to include.
+The defaults are c("N", "aR2", "Ymean")}
 
-\item{star_levels}{vector of cut offs for statistical significance stars, c(0.10, 0.05, 0.01) are the defaults}
+\item{star_levels}{vector of cut offs for statistical significance stars.
+The defaults are c(0.10, 0.05, 0.01).
+Make this 0 for no stars at all}
 }
 \description{
 Like stata's `estout`, output regression results nicely.

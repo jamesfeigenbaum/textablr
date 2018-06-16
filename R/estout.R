@@ -7,8 +7,11 @@
 #' @param var_labels tibble of variable labels, this sets the order of variables in the table
 #' @param var_indicates tibble of variables to indicate, this sets of the order of indicator variables in the table
 #' @param var_omits vector of variables to omit
-#' @param sumstat_include vector of summary statistics to include
-#' @param star_levels vector of cut offs for statistical significance stars, c(0.10, 0.05, 0.01) are the defaults
+#' @param sumstat_include vector of summary statistics to include.
+#'     The defaults are c("N", "aR2", "Ymean")
+#' @param star_levels vector of cut offs for statistical significance stars.
+#'     The defaults are c(0.10, 0.05, 0.01).
+#'     Make this 0 for no stars at all
 #'
 #' @import magrittr
 #' @importFrom purrr map map_chr transpose
