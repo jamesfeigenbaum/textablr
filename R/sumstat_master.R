@@ -83,8 +83,39 @@ sumstat_master <- function(regs, sumstat_include = "N", sumstat_names) {
       bind_cols(sumstat_storage, .)
   }
 
+  if ("Ysd" %in% sumstat_include) {
+    sumstat_storage <- y_vector %>%
+      # for some reason sd isnt' working
+      map_dbl(var) %>%
+      sqrt() %>%
+      tibble("Ysd" = .) %>%
+      bind_cols(sumstat_storage, .)
+  }
+
+  # could add other functions of Y pretty easily...
+
+  if ("APF" %in% sumstat_include) {
+
+    sumstat_storage <-
+      regs %>%
+      map(magrittr::extract("stage1")) %>%
+      map(magrittr::extract("iv1fstat")) %>%
+      map(magrittr::extract(1)) %>%
+      map(magrittr::extract("F")) %>%
+      tibble(reg_number = 1:dim(regs_glance)[1], term = .) %>%
+      # if a regression is not an IV
+      # term will be NULL
+      filter(!map_lgl(term, is.null)) %>%
+      tidyr::unnest(term) %>%
+      right_join(tibble::tibble(reg_number = 1:dim(regs_glance)[1]),
+                 by = "reg_number") %>%
+      select(APF = term) %>%
+      bind_cols(sumstat_storage, .)
+
+  }
+
   out_sumstats <- sumstat_storage %>%
-    select(-1) %>%
+    select(sumstat_include) %>%
     map(1:(length(sumstat_include)), pull, .data = .) %>%
     # surround with \multicolumn{1}{c}{XXX}
     map2(sumstat_names %>%

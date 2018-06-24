@@ -17,11 +17,13 @@
 
 # summary stat lookup
 # TODO enable custom proper names for summary statistics
-sumstat_names <- data.frame(code = c("N", "Ymean", "R2", "aR2", "df", "F"),
+sumstat_names <- data.frame(code = c("N", "Ymean", "R2", "aR2", "df", "F", "Ysd", "APF"),
                         proper_name = c("Observations", "Y Mean",
                                         "R$^{2}$", "Adjusted R$^{2}$",
-                                        "Degrees of Freedom", "F-Statistic"),
-                        format = c("%.0f", "%.2f", "%.2f", "%.2f", "%.0f", "%.2f")) %>%
+                                        "Degrees of Freedom", "F-Statistic",
+                                        "Y Std Dev",
+                                        "Angrist-Pischke F-Stat"),
+                        format = c("%.0f", "%.2f", "%.2f", "%.2f", "%.0f", "%.2f", "%.2f", "%.2f")) %>%
   dplyr::mutate(format = format %>% paste0("\\multicolumn{1}{c}{", ., "}"))
 
 #' @rdname textablr_lookups
@@ -79,8 +81,10 @@ p.value <- NULL
 proper_name <- NULL
 r.squared <- NULL
 reg_number <- NULL
+sd <- NULL
 se <- NULL
 sig_stars <- NULL
 std.error <- NULL
 term  <- NULL
 value <- NULL
+var <- NULL
