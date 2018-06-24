@@ -33,6 +33,9 @@
 #'
 #' # and a tibble of variable labels (optional)
 #' var_labels <- tibble::tibble(term = c("wt", "hp"), label = c("Weight", "Horsepower"))
+#' # when labelling an instrumental variable in felm syntax
+#' # the term should be "`x(fit)`" including the `s
+#' # if x is instrumented for by some z
 #'
 #' # which variables to omit? (optional)
 #' var_omits <- c("(Intercept)")

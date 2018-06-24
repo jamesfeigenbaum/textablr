@@ -116,7 +116,7 @@ x_fe_master <- function(regs, var_labels = NULL, var_indicates = NULL, var_omits
       spread(key = reg_number, value = value, sep = "_", fill = "") %>%
       # order everything based on labels
       mutate(order2 = row_number()) %>%
-      left_join(var_labels %>% select(label) %>% mutate(order1 = row_number()), by = "label") %>%
+      left_join(var_labels %>% distinct(label) %>% mutate(order1 = row_number()), by = "label") %>%
       arrange(order1, order2) %>%
       select(-order1, -order2) %>%
       mutate(label = if_else(beta_se == "estimate_star", label, "")) %>%
