@@ -6,7 +6,8 @@
 \usage{
 estout(regs, file = "", var_labels = NULL, var_omits = NULL,
   var_indicates = NULL, sumstat_include = sumstat_include_default,
-  star_levels = star_level_default)
+  star_levels = star_level_default, beta_digits = 2,
+  se_digits = beta_digits)
 }
 \arguments{
 \item{regs}{stored regression output in a list}
@@ -25,6 +26,10 @@ The defaults are c("N", "aR2", "Ymean")}
 \item{star_levels}{vector of cut offs for statistical significance stars.
 The defaults are c(0.10, 0.05, 0.01).
 Make this 0 for no stars at all}
+
+\item{beta_digits}{3 or 3.1 or 3.14 or 3.146 or 3.1459... default is 2 digts = 3.14}
+
+\item{se_digits}{3 or 3.1 or 3.14 or 3.146 or 3.1459... default is whatever beta_digits is}
 }
 \description{
 Like stata's `estout`, output regression results nicely.

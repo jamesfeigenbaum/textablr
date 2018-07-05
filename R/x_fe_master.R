@@ -19,7 +19,8 @@
 
 # coefficients
 
-x_fe_master <- function(regs, var_labels = NULL, var_indicates = NULL, var_omits = NULL, star_levels = star_level_default){
+x_fe_master <- function(regs, var_labels = NULL, var_indicates = NULL, var_omits = NULL, star_levels = star_level_default,
+                        beta_digits, se_digits){
 
     reg_columns <- length(regs)
 
@@ -98,19 +99,22 @@ x_fe_master <- function(regs, var_labels = NULL, var_indicates = NULL, var_omits
 
     reg_table_varlist <- c(reg_table_x_varlist, reg_table_fe_varlist)
 
+    beta_fmt <- beta_digits %>% sprintf("%s%df", "%.", .)
+    se_fmt <- se_digits %>% sprintf("(%s%df)", "%.", .)
+
     out_x <- expand.grid(label = reg_table_x_varlist, reg_number = 1:reg_columns, stringsAsFactors = FALSE) %>%
       as_tibble() %>%
       left_join(reg_table_x, by = c("label", "reg_number")) %>%
       # TODO add customization for digits and decimals in beta and se etc
       # add stars
       mutate(estimate_string = estimate %>%
-               sprintf("%.2f", .)) %>%
+               sprintf(beta_fmt, .)) %>%
       mutate(estimate_star = if_else(sig_stars == 0, estimate_string,
                                      paste0(estimate_string, "\\sym{", strrep("*", sig_stars), "}")
       )) %>%
       # add parentheses to SE
       # TODO use options for SE or t or pvalue
-      mutate(se = if_else(is.na(std.error), "", std.error %>% sprintf("(%.2f)", .))) %>%
+      mutate(se = if_else(is.na(std.error), "", std.error %>% sprintf(se_fmt, .))) %>%
       select(reg_number, estimate_star, se, label) %>%
       gather(key = "beta_se", value = "value", -reg_number, -label) %>%
       spread(key = reg_number, value = value, sep = "_", fill = "") %>%

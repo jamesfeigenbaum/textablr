@@ -5,7 +5,8 @@
 \title{Compile Regression Coefficients for Output}
 \usage{
 x_fe_master(regs, var_labels = NULL, var_indicates = NULL,
-  var_omits = NULL, star_levels = star_level_default)
+  var_omits = NULL, star_levels = star_level_default, beta_digits,
+  se_digits)
 }
 \arguments{
 \item{regs}{stored regression output in a list}
