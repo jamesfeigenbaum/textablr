@@ -19,7 +19,8 @@ Imports:
   purrr,
   tibble,
   stringr,
-  broom
+  broom,
+  clipr
 Suggests:
   lfe,
   rdrobust

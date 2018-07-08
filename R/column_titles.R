@@ -8,7 +8,8 @@
 #'
 #' @importFrom purrr map2_chr
 #' @importFrom magrittr add
-#' @importFrom utils head writeClipboard
+#' @importFrom utils head
+#' @importFrom clipr write_clip
 #'
 #' @examples
 #'
@@ -45,7 +46,7 @@ column_names_tex <- function(column_titles, column_widths, copy = TRUE){
   if (copy == TRUE) {
 
     c(out1, out2) %>%
-      writeClipboard()
+      write_clip()
 
   }
 
