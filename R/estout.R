@@ -12,6 +12,9 @@
 #' @param star_levels vector of cut offs for statistical significance stars.
 #'     The defaults are c(0.10, 0.05, 0.01).
 #'     Make this 0 for no stars at all
+#' @param sumstat_names tibble of proper names and digit formatting for summary statistics
+#'     Copy the default tibble to the clipboard with `textablr_get_sumstat_names()` function
+#'     and change names and digits.
 #' @param beta_digits 3 or 3.1 or 3.14 or 3.146 or 3.1459... default is 2 digts = 3.14
 #' @param se_digits 3 or 3.1 or 3.14 or 3.146 or 3.1459... default is whatever beta_digits is
 #'
@@ -55,7 +58,7 @@
 
 estout <- function(regs, file = "",
                    var_labels = NULL, var_omits = NULL, var_indicates = NULL,
-                   sumstat_include = sumstat_include_default,
+                   sumstat_include = sumstat_include_default, sumstat_names = sumstat_names_default,
                    star_levels = star_level_default,
                    beta_digits = 2, se_digits = beta_digits) {
 

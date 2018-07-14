@@ -19,7 +19,8 @@
 
 # coefficients
 
-x_fe_master <- function(regs, var_labels = NULL, var_indicates = NULL, var_omits = NULL, star_levels = star_level_default,
+x_fe_master <- function(regs, var_labels = NULL, var_indicates = NULL, var_omits = NULL,
+                        star_levels = star_level_default,
                         beta_digits, se_digits){
 
     reg_columns <- length(regs)

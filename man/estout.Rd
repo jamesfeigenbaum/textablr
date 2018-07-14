@@ -6,8 +6,8 @@
 \usage{
 estout(regs, file = "", var_labels = NULL, var_omits = NULL,
   var_indicates = NULL, sumstat_include = sumstat_include_default,
-  star_levels = star_level_default, beta_digits = 2,
-  se_digits = beta_digits)
+  sumstat_names = sumstat_names_default, star_levels = star_level_default,
+  beta_digits = 2, se_digits = beta_digits)
 }
 \arguments{
 \item{regs}{stored regression output in a list}
@@ -22,6 +22,10 @@ estout(regs, file = "", var_labels = NULL, var_omits = NULL,
 
 \item{sumstat_include}{vector of summary statistics to include.
 The defaults are c("N", "aR2", "Ymean")}
+
+\item{sumstat_names}{tibble of proper names and digit formatting for summary statistics
+Copy the default tibble to the clipboard with `textablr_get_sumstat_names()` function
+and change names and digits.}
 
 \item{star_levels}{vector of cut offs for statistical significance stars.
 The defaults are c(0.10, 0.05, 0.01).
