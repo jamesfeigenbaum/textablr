@@ -52,15 +52,15 @@
 #' # which summary stats to include?
 #' sumstat_include <- c("N", "aR2", "Ymean")
 #'
-#' # estout(regs, file = "", var_labels, var_omits, var_indicates, sumstat_include)
+#' # textablr_estout(regs, file = "", var_labels, var_omits, var_indicates, sumstat_include)
 #'
-#' @export estout
+#' @export textablr_estout
 
-estout <- function(regs, file = "",
-                   var_labels = NULL, var_omits = NULL, var_indicates = NULL,
-                   sumstat_include = sumstat_include_default, sumstat_names = sumstat_names_default,
-                   star_levels = star_level_default,
-                   beta_digits = 2, se_digits = beta_digits) {
+textablr_estout <- function(regs, file = "",
+                            var_labels = NULL, var_omits = NULL, var_indicates = NULL,
+                            sumstat_include = sumstat_include_default, sumstat_names = sumstat_names_default,
+                            star_levels = star_level_default,
+                            beta_digits = 2, se_digits = beta_digits) {
 
   # we're going to extract some things right from regs
   # but other things from the list of summaries

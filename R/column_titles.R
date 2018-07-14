@@ -19,14 +19,14 @@
 #' c_title <- c("Male", "Female")
 #' c_widths <- c(3, 3)
 #'
-#' column_names_tex(column_titles = c_title, column_widths = c_widths)
+#' textablr_column_names_for_tex(column_titles = c_title, column_widths = c_widths)
 #'
-#' @export column_names_tex
+#' @export textablr_column_names_for_tex
 
 
 # column names
 
-column_names_tex <- function(column_titles, column_widths, copy = TRUE){
+textablr_column_names_for_tex <- function(column_titles, column_widths, copy = TRUE){
 
   column_underline_start <- column_widths %>% c(1, .) %>% cumsum() %>% add(1) %>% head(-1)
   column_underline_end <- column_widths %>% cumsum() %>% add(1)
