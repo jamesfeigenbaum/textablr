@@ -25,9 +25,9 @@ textablr_get_sumstat_names <- function() {
                                "Y Std Dev",
                                "Angrist-Pischke F-Stat"),
                format = c("%.0f", "%.2f", "%.2f", "%.2f", "%.0f", "%.2f", "%.2f", "%.2f")) %>%
-    dplyr::mutate(format = format %>% paste0("\\multicolumn{1}{c}{", ., "}"))' %>% write_clip()
+    dplyr::mutate(format = format %>% paste0("\\\\multicolumn{1}{c}{", ., "}"))' %>% write_clip()
 
-  print("The sumstat_names definition is now in your clipboard")
+  print("The sumstat_names definition is now in your clipboard. Don't change the code variable!")
 }
 
 #' @rdname textablr_get_parameters
