@@ -11,6 +11,7 @@
 #' @export textablr_get_sumstat_names
 #' @export textablr_get_var_labels
 #' @export textablr_get_var_indicates
+#' @export textablr_get_cluster_labels
 #'
 #' @rdname textablr_get_parameters
 
@@ -48,4 +49,17 @@ textablr_get_var_indicates <- function() {
   'var_indicates <- tibble::tibble(term = c("am", "cyl"), indicator = c("Transmission FE", "Cylinders FE"))' %>% write_clip()
 
   print("A tibble for variable indicating is now in your clipboard")
+}
+
+#' @rdname textablr_get_parameters
+
+# cluster SE names
+textablr_get_cluster_labels <- function() {
+
+  'cluster_labels <- tibble::tibble(term = c("state", "year"),
+                          proper_name = c("Clusters(State)", "Clusters(Year)")) %>%
+    mutate(term = paste0("cluster_name_", term))' %>% write_clip()
+
+  print("A tibble for cluster labelling is now in your clipboard")
+
 }

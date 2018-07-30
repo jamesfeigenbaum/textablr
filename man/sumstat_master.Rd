@@ -4,7 +4,8 @@
 \alias{sumstat_master}
 \title{Gather Summary Statistics from Regression Results for Output}
 \usage{
-sumstat_master(regs, sumstat_include = "N", sumstat_names)
+sumstat_master(regs, sumstat_include = "N", sumstat_names,
+  cluster_labels)
 }
 \arguments{
 \item{regs}{stored regression output in a list}

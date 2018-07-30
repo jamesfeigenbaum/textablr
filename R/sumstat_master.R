@@ -6,12 +6,13 @@
 #' @param sumstat_include vector of summary statistics to include
 #' @param sumstat_names tibble from the lookup with summary stats and proper names
 #'
-#' @importFrom purrr map_dfr map_int map_dbl map2
+#' @importFrom purrr map_dfr map_int map_dbl map2 map_chr
 #' @importFrom broom glance
 #' @importFrom dplyr pull filter arrange
+#' @importFrom tidyr spread gather
 #' @keywords internal
 
-sumstat_master <- function(regs, sumstat_include = "N", sumstat_names) {
+sumstat_master <- function(regs, sumstat_include = "N", sumstat_names, cluster_labels) {
 
   # summary statistics
   # all with the prefix sumstat_
@@ -114,23 +115,79 @@ sumstat_master <- function(regs, sumstat_include = "N", sumstat_names) {
 
   }
 
+  # clusters
+  if ("N_clusters" %in% sumstat_include) {
+
+    # number of clusters
+    clusters <-
+      regs %>%
+      map(magrittr::extract2, "clustervar") %>%
+      tibble(reg_number = 1:dim(regs_glance)[1], clustervar = .) %>%
+      # if a regression has no clusters
+      # clustervar will be NULL
+      filter(!map_lgl(clustervar, is.null)) %>%
+      mutate(cluster_name = clustervar %>% map(names)) %>%
+      tidyr::unnest(clustervar, cluster_name) %>%
+      mutate(cluster_n = map(clustervar, levels) %>% map_int(length)) %>%
+      # how many ways?
+      group_by(reg_number) %>%
+      mutate(cluster_k = n()) %>%
+      select(reg_number, starts_with("cluster_")) %>%
+      # deal with regressions without clustered SEs
+      right_join(tibble(reg_number = 1:dim(regs_glance)[1]), by = "reg_number") %>%
+      # if cluster_k is NA, make that 0
+      mutate(cluster_k = ifelse(is.na(cluster_k), 0, cluster_k)) %>%
+      ungroup()
+
+    sumstat_kway_clusters <- clusters %>%
+      select(-cluster_k) %>%
+      spread(key = "cluster_name", value = "cluster_n", sep = "_") %>%
+      select(-cluster_name_NA) %>%
+      t() %>%
+      as.tibble(rownames = "term") %>%
+      filter(term != "reg_number") %>%
+      left_join(cluster_labels %>% rownames_to_column(var = "order"), by = "term") %>%
+      select(-term) %>%
+      gather(key = "reg_number", value = "value", -proper_name, -order) %>%
+      mutate(reg_number = reg_number %>% str_extract("[0-9]+") %>% as.numeric()) %>%
+      arrange(reg_number, order) %>%
+      # surround with \multicolumn{1}{c}{XXX}
+      mutate(value = ifelse(is.na(value), "", value %>% sprintf("\\multicolumn{1}{c}{%s}", .))) %>%
+      spread(key = reg_number, value = value, sep = "_", fill = "") %>%
+      arrange(order) %>%
+      select(-order) %>%
+      map(magrittr::extract) %>%
+      purrr::transpose() %>%
+      map_chr(paste0, collapse = " & ") %>%
+      str_c(" \\\\")
+
+  }
+
+  # clustering works differently
+  sumstat_include0 <- sumstat_include[sumstat_include != "N_clusters"]
+
   out_sumstats <- sumstat_storage %>%
-    select(sumstat_include) %>%
-    map(1:(length(sumstat_include)), pull, .data = .) %>%
+    select(sumstat_include0) %>%
+    map(1:(length(sumstat_include0)), pull, .data = .) %>%
     # surround with \multicolumn{1}{c}{XXX}
     map2(sumstat_names %>%
-           filter(code %in% sumstat_include) %>%
-           arrange(match(code, sumstat_include)) %>%
+           filter(code %in% sumstat_include0) %>%
+           arrange(match(code, sumstat_include0)) %>%
            pull(format),
          ~ sprintf(fmt = .y, .x)) %>%
     # add on name
     map2(sumstat_names %>%
-           filter(code %in% sumstat_include) %>%
-           arrange(match(code, sumstat_include)) %>%
+           filter(code %in% sumstat_include0) %>%
+           arrange(match(code, sumstat_include0)) %>%
            pull(proper_name) %>%
            as.character(), ., c) %>%
     map_chr(paste0, collapse = " & ") %>%
     str_c(" \\\\")
+
+  # if we want cluster SEs, include them
+  if ("N_clusters" %in% sumstat_include) {
+    out_sumstats <- c(out_sumstats, sumstat_kway_clusters)
+  }
 
   return(out_sumstats)
 

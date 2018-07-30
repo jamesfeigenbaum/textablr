@@ -16,13 +16,14 @@
 #' @rdname textablr_lookups
 
 # summary stat lookup
-sumstat_names_default <- data.frame(code = c("N", "Ymean", "R2", "aR2", "df", "F", "Ysd", "APF"),
+sumstat_names_default <- data.frame(code = c("N", "Ymean", "R2", "aR2", "df", "F", "Ysd", "APF", "N_clusters"),
                         proper_name = c("Observations", "Y Mean",
                                         "R$^{2}$", "Adjusted R$^{2}$",
                                         "Degrees of Freedom", "F-Statistic",
                                         "Y Std Dev",
-                                        "Angrist-Pischke F-Stat"),
-                        format = c("%.0f", "%.2f", "%.2f", "%.2f", "%.0f", "%.2f", "%.2f", "%.2f")) %>%
+                                        "Angrist-Pischke F-Stat",
+                                        "Number of Clusters"),
+                        format = c("%.0f", "%.2f", "%.2f", "%.2f", "%.0f", "%.2f", "%.2f", "%.2f", "%.0f")) %>%
   dplyr::mutate(format = format %>% paste0("\\multicolumn{1}{c}{", ., "}"))
 
 ## DEFAULTS

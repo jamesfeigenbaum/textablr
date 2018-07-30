@@ -5,6 +5,7 @@
 \alias{textablr_get_sumstat_names}
 \alias{textablr_get_var_labels}
 \alias{textablr_get_var_indicates}
+\alias{textablr_get_cluster_labels}
 \title{Tex Table Get Tibbles in Clipboard}
 \usage{
 textablr_get_sumstat_names()
@@ -12,6 +13,8 @@ textablr_get_sumstat_names()
 textablr_get_var_labels()
 
 textablr_get_var_indicates()
+
+textablr_get_cluster_labels()
 }
 \description{
 Helper function to load the tibbles for defining summary statistics, variable labels, etc

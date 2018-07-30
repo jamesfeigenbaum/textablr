@@ -7,7 +7,7 @@
 \alias{indicator_levels}
 \alias{star_level_default}
 \title{A few simple lookup vectors and tibbles to help with regression output}
-\format{An object of class \code{data.frame} with 8 rows and 3 columns.}
+\format{An object of class \code{data.frame} with 9 rows and 3 columns.}
 \usage{
 sumstat_names_default
 

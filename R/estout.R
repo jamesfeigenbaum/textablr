@@ -17,6 +17,7 @@
 #'     and change names and digits.
 #' @param beta_digits 3 or 3.1 or 3.14 or 3.146 or 3.1459... default is 2 digts = 3.14
 #' @param se_digits 3 or 3.1 or 3.14 or 3.146 or 3.1459... default is whatever beta_digits is
+#' @param cluster_labels tibble of lables for cluster SE variables (one or multi-way clustering)
 #'
 #' @import magrittr
 #' @importFrom purrr map map_chr transpose
@@ -60,7 +61,8 @@ textablr_estout <- function(regs, file = "",
                             var_labels = NULL, var_omits = NULL, var_indicates = NULL,
                             sumstat_include = sumstat_include_default, sumstat_names = sumstat_names_default,
                             star_levels = star_level_default,
-                            beta_digits = 2, se_digits = beta_digits) {
+                            beta_digits = 2, se_digits = beta_digits,
+                            cluster_labels = NULL) {
 
   # we're going to extract some things right from regs
   # but other things from the list of summaries
@@ -80,7 +82,7 @@ textablr_estout <- function(regs, file = "",
     as.character()
 
   # summary statistics
-  out_sumstats <- sumstat_master(regs, sumstat_include, sumstat_names)
+  out_sumstats <- sumstat_master(regs, sumstat_include, sumstat_names, cluster_labels)
 
   # coefficients and FEs
   out_x_fe <- x_fe_master(regs, var_labels, var_indicates, var_omits, star_levels, beta_digits, se_digits)
