@@ -58,7 +58,7 @@ textablr_get_cluster_labels <- function() {
 
   'cluster_labels <- tibble::tibble(term = c("state", "year"),
                           proper_name = c("Clusters(State)", "Clusters(Year)")) %>%
-    mutate(term = paste0("cluster_name_", term))' %>% write_clip()
+    dplyr::mutate(term = paste0("cluster_name_", term))' %>% write_clip()
 
   print("A tibble for cluster labelling is now in your clipboard")
 
