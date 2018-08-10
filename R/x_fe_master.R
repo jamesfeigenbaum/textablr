@@ -63,6 +63,7 @@ x_fe_master <- function(regs, var_labels = NULL, var_indicates = NULL, var_omits
       bind_rows(fe_terms) %>%
       # check against indicator regexs
       mutate(indicator_term = var_indicates %>%
+               arrange(desc(str_count(term))) %>%
                pull(term) %>%
                paste0(collapse = "|") %>%
                str_extract(string = term, pattern = .)) %>%
