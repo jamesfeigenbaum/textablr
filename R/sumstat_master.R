@@ -10,6 +10,7 @@
 #' @importFrom broom glance
 #' @importFrom dplyr pull filter arrange
 #' @importFrom tidyr spread gather
+#' @importFrom stats sd
 #' @keywords internal
 
 sumstat_master <- function(regs, sumstat_include = "N", sumstat_names, cluster_labels) {
@@ -44,31 +45,71 @@ sumstat_master <- function(regs, sumstat_include = "N", sumstat_names, cluster_l
   }
 
   if ("R2" %in% sumstat_include) {
-    sumstat_storage <- regs_glance %>%
-      pull(r.squared) %>%
-      tibble("R2" = .) %>%
-      bind_cols(sumstat_storage, .)
+
+    if ("r.squared" %in% names(regs_glance)) {
+
+      sumstat_storage <- regs_glance %>%
+        pull(r.squared) %>%
+        tibble("R2" = .) %>%
+        bind_cols(sumstat_storage, .)
+
+    } else {
+
+      sumstat_storage <- bind_cols(sumstat_storage, "R2" = rep(NA, nrow(sumstat_storage)))
+
+    }
+
   }
 
   if ("aR2" %in% sumstat_include) {
-    sumstat_storage <- regs_glance %>%
-      pull(adj.r.squared) %>%
-      tibble("aR2" = .) %>%
-      bind_cols(sumstat_storage, .)
+
+    if ("adj.r.squared" %in% names(regs_glance)) {
+
+      sumstat_storage <- regs_glance %>%
+        pull(adj.r.squared) %>%
+        tibble("aR2" = .) %>%
+        bind_cols(sumstat_storage, .)
+
+    } else {
+
+      sumstat_storage <- bind_cols(sumstat_storage, "aR2" = rep(NA, nrow(sumstat_storage)))
+
+    }
+
   }
 
   if ("df" %in% sumstat_include) {
-    sumstat_storage <- regs_glance %>%
-      pull("df.residual") %>%
-      tibble("df" = .) %>%
-      bind_cols(sumstat_storage, .)
+
+    if ("df.residual" %in% names(regs_glance)) {
+
+      sumstat_storage <- regs_glance %>%
+        pull(df.residual) %>%
+        tibble("df" = .) %>%
+        bind_cols(sumstat_storage, .)
+
+    } else {
+
+      sumstat_storage <- bind_cols(sumstat_storage, "df" = rep(NA, nrow(sumstat_storage)))
+
+    }
+
   }
 
   if ("F" %in% sumstat_include) {
-    sumstat_storage <- regs_glance %>%
-      pull("statistic") %>%
-      tibble("F" = .) %>%
-      bind_cols(sumstat_storage, .)
+
+    if ("statistic" %in% names(regs_glance)) {
+
+      sumstat_storage <- regs_glance %>%
+        pull("statistic") %>%
+        tibble("F" = .) %>%
+        bind_cols(sumstat_storage, .)
+
+    } else {
+
+      sumstat_storage <- bind_cols(sumstat_storage, "F" = rep(NA, nrow(sumstat_storage)))
+
+    }
+
   }
 
   if ("Ymean" %in% sumstat_include) {
@@ -86,9 +127,7 @@ sumstat_master <- function(regs, sumstat_include = "N", sumstat_names, cluster_l
 
   if ("Ysd" %in% sumstat_include) {
     sumstat_storage <- y_vector %>%
-      # for some reason sd isnt' working
-      map_dbl(var) %>%
-      sqrt() %>%
+      map_dbl(stats::sd) %>%
       tibble("Ysd" = .) %>%
       bind_cols(sumstat_storage, .)
   }
