@@ -8,16 +8,19 @@
 #' @param var_indicates tibble of variables to indicate, this sets of the order of indicator variables in the table
 #' @param var_omits vector of variables to omit
 #' @param sumstat_include vector of summary statistics to include.
-#'     The defaults are c("N", "aR2", "Ymean")
+#'     The defaults are `c("nobs", "adj.r.squared", "Ymean")`
+#'     Adjust the names by using names in the vector:
+#'     `c("Observations" = "nobs", "Adjusted R-Squared" = "adj.r.squared", "Y Mean Value" = "Ymean")`
+#'     The names of these summary stats match the output of `broom::glance` when possible
 #' @param star_levels vector of cut offs for statistical significance stars.
-#'     The defaults are c(0.10, 0.05, 0.01).
-#'     Make this 0 for no stars at all
-#' @param sumstat_names tibble of proper names and digit formatting for summary statistics
-#'     Copy the default tibble to the clipboard with `textablr_get_sumstat_names()` function
-#'     and change names and digits.
+#'     The defaults are `c(0.10, 0.05, 0.01)`.
+#'     Make this NULL for no stars at all
+#' @param sumstat_format tibble of digit formatting for summary statistics
+#'     Copy the default tibble to the clipboard with `textablr_get_sumstat_format()` function
+#'     and change digits.
 #' @param beta_digits 3 or 3.1 or 3.14 or 3.146 or 3.1459... default is 2 digts = 3.14
 #' @param se_digits 3 or 3.1 or 3.14 or 3.146 or 3.1459... default is whatever beta_digits is
-#' @param cluster_labels tibble of lables for cluster SE variables (one or multi-way clustering)
+#' @param cluster_labels tibble of labels for cluster SE variables (one or multi-way clustering)
 #'
 #' @import magrittr
 #' @importFrom purrr map map_chr transpose
@@ -51,7 +54,7 @@
 #'     indicator = c("Transmission FE", "Cylinders FE"))
 #'
 #' # which summary stats to include?
-#' sumstat_include <- c("N", "aR2", "Ymean")
+#' sumstat_include <- c("nobs", "adj.r.squared", "Ymean")
 #'
 #' # textablr_estout(regs, file = "", var_labels, var_omits, var_indicates, sumstat_include)
 #'
@@ -59,7 +62,7 @@
 
 textablr_estout <- function(regs, file = "",
                             var_labels = NULL, var_omits = NULL, var_indicates = NULL,
-                            sumstat_include = sumstat_include_default, sumstat_names = sumstat_names_default,
+                            sumstat_include = sumstat_include_default, sumstat_format = sumstat_format_default,
                             star_levels = star_level_default,
                             beta_digits = 2, se_digits = beta_digits,
                             cluster_labels = NULL) {
@@ -82,7 +85,7 @@ textablr_estout <- function(regs, file = "",
     as.character()
 
   # summary statistics
-  out_sumstats <- sumstat_master(regs, sumstat_include, sumstat_names, cluster_labels)
+  out_sumstats <- sumstat_master(regs, sumstat_include, sumstat_format, cluster_labels)
 
   # coefficients and FEs
   out_x_fe <- x_fe_master(regs, var_labels, var_indicates, var_omits, star_levels, beta_digits, se_digits)

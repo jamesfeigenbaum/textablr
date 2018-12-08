@@ -8,7 +8,7 @@
 #'
 #' @importFrom clipr write_clip
 #'
-#' @export textablr_get_sumstat_names
+#' @export textablr_get_sumstat_format
 #' @export textablr_get_var_labels
 #' @export textablr_get_var_indicates
 #' @export textablr_get_cluster_labels
@@ -16,10 +16,10 @@
 #' @rdname textablr_get_parameters
 
 # summary statistic names and formats
-textablr_get_sumstat_names <- function() {
+textablr_get_sumstat_format <- function() {
 
-  'sumstat_names <-
-    data.frame(code = c("N", "Ymean", "R2", "aR2", "df", "F", "Ysd", "APF"),
+  'sumstat_format <-
+    data.frame(code = c("nobs", "Ymean", "r.squared", "adj.r.squared", "df", "statistic", "Ysd", "APF"),
                proper_name = c("Observations", "Y Mean",
                                "R$^{2}$", "Adjusted R$^{2}$",
                                "Degrees of Freedom", "F-Statistic",
@@ -28,7 +28,7 @@ textablr_get_sumstat_names <- function() {
                format = c("%.0f", "%.2f", "%.2f", "%.2f", "%.0f", "%.2f", "%.2f", "%.2f")) %>%
     dplyr::mutate(format = format %>% paste0("\\\\multicolumn{1}{c}{", ., "}"))' %>% write_clip()
 
-  print("The sumstat_names definition is now in your clipboard. Don't change the code variable!")
+  print("The sumstat_format definition is now in your clipboard. Don't change the code variable!")
 }
 
 #' @rdname textablr_get_parameters

@@ -10,7 +10,12 @@ library(haven)
 
 # using lm, glm, and felm with `card 1995`
 card1995 <- "https://storage.googleapis.com/causal-inference-mixtape.appspot.com/card.dta" %>%
-  read_dta()
+  read_dta() %>%
+  # convert the region indicator dummies to a factor
+  gather(key = "region", value = "dummy", starts_with("reg")) %>%
+  filter(dummy == 1) %>%
+  mutate(region = region %>% str_remove("reg") %>% as.numeric()) %>%
+  select(-dummy)
 
 # Regressions
 ols <- card1995 %>%
@@ -31,16 +36,26 @@ iv3 <- card1995 %>%
 fs3 <- card1995 %>%
   lm(data = . , educ ~ nearc4 + nearc2 + exper + black + south + married + smsa)
 
+iv4 <- card1995 %>%
+  felm(data = ., lwage ~ exper + black + south + married + smsa | region | (educ ~ nearc4))
+fs4 <- card1995 %>%
+  felm(data = . , educ ~ nearc4 + exper + black + south + married + smsa | region)
+
 # Regression Table
 
-regs <- list(ols, iv1, iv2, iv3, fs1, fs2, fs3)
+# regs <- list(ols, iv1, iv2, iv3, fs1, fs2, fs3)
+regs <- list(ols, iv1, iv2, iv3, iv4)
 
 var_labels <- tibble::tibble(term = c("educ", "`educ(fit)`", "exper", "black", "south", "married", "smsa", "nearc4", "nearc2"),
                              label = c("Education", "Education IV", "Experience", "Black", "South", "Married", "SMSA", "Near 4Year College", "Near 2Year College"))
 
-sumstat_include <- c("N", "Ymean", "APF", "Ysd", "F")
+sumstat_include <- c("nobs", "Ymean", "APF", "Ysd", "statistic")
 
-estout(regs, var_labels = var_labels, var_omits = var_omits, sumstat_include = sumstat_include)
+var_indicates <- tibble::tibble(term = c("region", "black|south"), indicator = c("Region FE", "Race and South Controls"))
+
+var_indicates <- tibble::tibble(term = c("region"), indicator = c("Region FE"))
+
+textablr_estout(regs, var_labels = var_labels, var_omits = "(Intercept)", var_indicates = var_indicates)
 
 # F-Stat
 

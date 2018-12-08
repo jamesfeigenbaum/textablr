@@ -14,6 +14,7 @@
 #' @importFrom tidyr gather spread unnest
 #' @import dplyr
 #' @importFrom broom tidy
+#' @importFrom fuzzyjoin regex_full_join
 #'
 #' @keywords internal
 
@@ -61,19 +62,15 @@ x_fe_master <- function(regs, var_labels = NULL, var_indicates = NULL, var_omits
       mutate(reg_number = reg_number %>% as.numeric()) %>%
       left_join(var_labels, by = "term") %>%
       bind_rows(fe_terms) %>%
-      # check against indicator regexs
-      mutate(indicator_term = var_indicates %>%
-               arrange(desc(str_count(term))) %>%
-               pull(term) %>%
-               paste0("$") %>%
-               paste0(collapse = "|") %>%
-               str_extract(string = term, pattern = .)) %>%
-      left_join(var_indicates, by = c("indicator_term" = "term")) %>%
+      # omit any variables?
       left_join(var_omits %>% as_tibble() %>% rename(term = value) %>% mutate(omit = 1),
                 by = "term") %>%
       # drop the rows we are omitting
       filter(is.na(omit)) %>%
+      # check against indicator regexs
+      regex_full_join(var_indicates, by = "term") %>%
       # give term as the label for rows without a label given
+      mutate(term = term.x) %>%
       mutate(label = if_else(is.na(label), term, label))
 
     # split the reg_table into coefficients and indicator rows
@@ -136,7 +133,8 @@ x_fe_master <- function(regs, var_labels = NULL, var_indicates = NULL, var_omits
 
     if (reg_table_fe %>% nrow() != 0) {
 
-      out_fe <- expand.grid(indicator = reg_table_fe_varlist, reg_number = 1:reg_columns, stringsAsFactors = FALSE) %>%
+      out_fe <- expand.grid(indicator = reg_table_fe_varlist,
+                            reg_number = 1:reg_columns, stringsAsFactors = FALSE) %>%
         as_tibble() %>%
         left_join(reg_table_fe, by = c("indicator", "reg_number")) %>%
         group_by(indicator, reg_number) %>%

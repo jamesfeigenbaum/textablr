@@ -20,8 +20,9 @@ Imports:
   tibble,
   stringr,
   broom,
-  clipr
+  clipr,
+  fuzzyjoin
 Suggests:
   lfe,
   rdrobust
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1

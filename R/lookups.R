@@ -16,14 +16,15 @@
 #' @rdname textablr_lookups
 
 # summary stat lookup
-sumstat_names_default <- data.frame(code = c("N", "Ymean", "R2", "aR2", "df", "F", "Ysd", "APF", "N_clusters"),
-                        proper_name = c("Observations", "Y Mean",
-                                        "R$^{2}$", "Adjusted R$^{2}$",
-                                        "Degrees of Freedom", "F-Statistic",
-                                        "Y Std Dev",
-                                        "Angrist-Pischke F-Stat",
-                                        "Number of Clusters"),
-                        format = c("%.0f", "%.2f", "%.2f", "%.2f", "%.0f", "%.2f", "%.2f", "%.2f", "%.0f")) %>%
+sumstat_format_default <-
+    data.frame(code = c("nobs", "Ymean", "r.squared", "adj.r.squared", "df", "statistic", "Ysd", "APF", "N_clusters"),
+             format = c("%.0f", "%.2f", "%.2f", "%.2f", "%.0f", "%.2f", "%.2f", "%.2f", "%.0f"),
+             proper_name = c("Observations", "Y Mean",
+                             "R$^{2}$", "Adjusted R$^{2}$",
+                             "Degrees of Freedom", "F-Statistic",
+                             "Y Std Dev",
+                             "Angrist-Pischke F-Stat",
+                             "Number of Clusters")) %>%
   dplyr::mutate(format = format %>% paste0("\\multicolumn{1}{c}{", ., "}"))
 
 ## DEFAULTS
@@ -31,7 +32,7 @@ sumstat_names_default <- data.frame(code = c("N", "Ymean", "R2", "aR2", "df", "F
 #' @rdname textablr_lookups
 
 # which summary stats to include if none are specified
-sumstat_include_default <- c("N", "aR2", "Ymean")
+sumstat_include_default <- c("nobs", "adj.r.squared", "Ymean")
 
 #' @rdname textablr_lookups
 

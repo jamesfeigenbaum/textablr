@@ -4,7 +4,7 @@
 \alias{sumstat_master}
 \title{Gather Summary Statistics from Regression Results for Output}
 \usage{
-sumstat_master(regs, sumstat_include = "N", sumstat_names,
+sumstat_master(regs, sumstat_include = "N", sumstat_format,
   cluster_labels)
 }
 \arguments{
@@ -12,7 +12,7 @@ sumstat_master(regs, sumstat_include = "N", sumstat_names,
 
 \item{sumstat_include}{vector of summary statistics to include}
 
-\item{sumstat_names}{tibble from the lookup with summary stats and proper names}
+\item{sumstat_format}{tibble from the lookup with summary stats and proper names}
 }
 \description{
 Helper function to construct summary statistics

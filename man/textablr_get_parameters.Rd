@@ -2,13 +2,13 @@
 % Please edit documentation in R/parameters_to_clipboard.R
 \name{textablr_get_parameters}
 \alias{textablr_get_parameters}
-\alias{textablr_get_sumstat_names}
+\alias{textablr_get_sumstat_format}
 \alias{textablr_get_var_labels}
 \alias{textablr_get_var_indicates}
 \alias{textablr_get_cluster_labels}
 \title{Tex Table Get Tibbles in Clipboard}
 \usage{
-textablr_get_sumstat_names()
+textablr_get_sumstat_format()
 
 textablr_get_var_labels()
 
