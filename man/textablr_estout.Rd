@@ -13,13 +13,17 @@ textablr_estout(regs, file = "", var_labels = NULL, var_omits = NULL,
 \arguments{
 \item{regs}{stored regression output in a list}
 
-\item{file}{output location, if blank prints to scree}
+\item{file}{output location, if blank prints to screen}
 
-\item{var_labels}{tibble of variable labels, this sets the order of variables in the table}
+\item{var_labels}{named vector of variable labels.
+For example, to label the `educ` variable `Education` and the `expr` variable `Experience`
+make this `c("Education" = "educ", "Experience" = "expr")`
+Note: this sets the order of variables in the table}
 
 \item{var_omits}{vector of variables to omit}
 
-\item{var_indicates}{tibble of variables to indicate, this sets of the order of indicator variables in the table}
+\item{var_indicates}{named vector of variables to indicate.
+This sets of the order of indicator variables in the table}
 
 \item{sumstat_include}{vector of summary statistics to include.
 The defaults are `c("nobs", "adj.r.squared", "Ymean")`
@@ -58,18 +62,17 @@ reg6 <- mtcars \%>\% lfe::felm(data = ., wt ~ hp | cyl + am)
 # function will take regressions as a list of list objects
 regs <- list(reg1, reg2, reg3, reg4, reg5, reg6)
 
-# and a tibble of variable labels (optional)
-var_labels <- tibble::tibble(term = c("wt", "hp"), label = c("Weight", "Horsepower"))
+# and a named vector of variable labels (optional)
+var_labels <- c("Weight" = "wt", "Horsepower" = "hp")
 # when labelling an instrumental variable in felm syntax
-# the term should be "`x(fit)`" including the `s
+# the term should be "`x(fit)`" including the backticks
 # if x is instrumented for by some z
 
 # which variables to omit? (optional)
 var_omits <- c("(Intercept)")
 
 # which variables to indicate yes no (good for FEs) (optional)
-var_indicates <- tibble::tibble(term = c("am", "cyl"),
-    indicator = c("Transmission FE", "Cylinders FE"))
+var_indicates <- c("Transmission FE" = "am", "Cylinders FE" = "cyl")
 
 # which summary stats to include?
 sumstat_include <- c("nobs", "adj.r.squared", "Ymean")

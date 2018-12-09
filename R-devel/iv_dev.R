@@ -7,6 +7,7 @@ library(tidyr)
 library(dplyr)
 library(broom)
 library(haven)
+library(fuzzyjoin)
 
 # using lm, glm, and felm with `card 1995`
 card1995 <- "https://storage.googleapis.com/causal-inference-mixtape.appspot.com/card.dta" %>%
@@ -46,14 +47,12 @@ fs4 <- card1995 %>%
 # regs <- list(ols, iv1, iv2, iv3, fs1, fs2, fs3)
 regs <- list(ols, iv1, iv2, iv3, iv4)
 
-var_labels <- tibble::tibble(term = c("educ", "`educ(fit)`", "exper", "black", "south", "married", "smsa", "nearc4", "nearc2"),
-                             label = c("Education", "Education IV", "Experience", "Black", "South", "Married", "SMSA", "Near 4Year College", "Near 2Year College"))
+var_labels <- c("Education" = "educ", "Education IV" = "`educ(fit)`",
+                "Near 4Year College" = "nearc4", "Near 2Year College" = "nearc2")
 
-sumstat_include <- c("nobs", "Ymean", "APF", "Ysd", "statistic")
+sumstat_include <- c("N" = "nobs", "Ymean", "APF", "Ysd", "statistic")
 
-var_indicates <- tibble::tibble(term = c("region", "black|south"), indicator = c("Region FE", "Race and South Controls"))
-
-var_indicates <- tibble::tibble(term = c("region"), indicator = c("Region FE"))
+var_indicates <- c("Region FE" = "region", "Race and South Controls" = "black|south")
 
 textablr_estout(regs, var_labels = var_labels, var_omits = "(Intercept)", var_indicates = var_indicates)
 

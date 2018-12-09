@@ -9,7 +9,6 @@
 #' @importFrom clipr write_clip
 #'
 #' @export textablr_get_sumstat_format
-#' @export textablr_get_var_labels
 #' @export textablr_get_var_indicates
 #' @export textablr_get_cluster_labels
 #'
@@ -29,16 +28,6 @@ textablr_get_sumstat_format <- function() {
     dplyr::mutate(format = format %>% paste0("\\\\multicolumn{1}{c}{", ., "}"))' %>% write_clip()
 
   print("The sumstat_format definition is now in your clipboard. Don't change the code variable!")
-}
-
-#' @rdname textablr_get_parameters
-
-# summary statistic names and formats
-textablr_get_var_labels <- function() {
-
-  'var_labels <- tibble::tibble(term = c("wt", "hp"), label = c("Weight", "Horsepower"))' %>% write_clip()
-
-  print("A tibble for variable labelling is now in your clipboard")
 }
 
 #' @rdname textablr_get_parameters

@@ -11,9 +11,9 @@ x_fe_master(regs, var_labels = NULL, var_indicates = NULL,
 \arguments{
 \item{regs}{stored regression output in a list}
 
-\item{var_labels}{tibble of variable labels}
+\item{var_labels}{vector of variable labels}
 
-\item{var_indicates}{tibble of variables to indicate}
+\item{var_indicates}{vector of variables to indicate}
 
 \item{var_omits}{vector of variables to omit}
 

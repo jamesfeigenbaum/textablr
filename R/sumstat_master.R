@@ -13,7 +13,8 @@
 #' @importFrom stats sd nobs
 #' @keywords internal
 
-sumstat_master <- function(regs, sumstat_include = "N", sumstat_format, cluster_labels) {
+sumstat_master <- function(regs, sumstat_include = c("nobs", "adj.r.squared", "Ymean"),
+                           sumstat_format, cluster_labels) {
 
   # summary statistics
   # all with the prefix sumstat_

@@ -3,8 +3,8 @@
 #' @description Helper function to construct coefficients
 #'
 #' @param regs stored regression output in a list
-#' @param var_labels tibble of variable labels
-#' @param var_indicates tibble of variables to indicate
+#' @param var_labels vector of variable labels
+#' @param var_indicates vector of variables to indicate
 #' @param var_omits vector of variables to omit
 #' @param star_levels statistical significance stars
 #'
@@ -26,23 +26,30 @@ x_fe_master <- function(regs, var_labels = NULL, var_indicates = NULL, var_omits
 
     reg_columns <- length(regs)
 
-    # if var_lables is null build dummy version
+    # if var_labels is null build dummy version
     if (is.null(var_labels)) {
-      var_labels <- tibble(term = c(""), label = c(""))
+      var_labels <- c("No Labels" = "")
     }
 
     # if var_indicates is empty, put a long random string in to prevent bad catches"
     if (is.null(var_indicates)) {
-      var_indicates <- tibble(term = c("asfkjhafdkjahsdfuashfajshgfaskjhgfaskjhdfgaksjgfaskdjfg"),
-                              indicator = c("Missing FE"))
+      var_indicates <- c("Missing FE" = "asfkjhafdkjahsdfuashfajshgfaskjhgfaskjhdfgaksjgfaskdjfg")
     }
+
+    # make var_labels and var_indicates tibbles for easier use downstream
+    # but easier for users to input named vectors
+    var_labels <- var_labels %>%
+      tibble(term = ., label = names(.))
+    var_indicates <- var_indicates %>%
+      tibble(term = ., indicator = names(.))
 
     # if var_omits is null, build dummy version
     if (is.null(var_omits)) {
       var_omits <- c("")
     }
 
-    # fes
+    # fes from felm
+    # fes as factors in other regression packages are handled using regex in the var indicator tibble
     fe_terms <-
       regs %>%
       map(magrittr::extract2, "fe") %>%
@@ -54,7 +61,7 @@ x_fe_master <- function(regs, var_labels = NULL, var_indicates = NULL, var_omits
       tidyr::unnest(term) %>%
       mutate(felm_fe = TRUE)
 
-    # extract with tidy
+    # extract with tidy from broom package
     # merge on labels or omit codes and order
     reg_table <-
       map_dfr(regs, tidy, .id = "reg_number", fe = FALSE, fe.error = FALSE) %>%
@@ -71,7 +78,8 @@ x_fe_master <- function(regs, var_labels = NULL, var_indicates = NULL, var_omits
       regex_full_join(var_indicates, by = "term") %>%
       # give term as the label for rows without a label given
       mutate(term = term.x) %>%
-      mutate(label = if_else(is.na(label), term, label))
+      mutate(label = case_when(!is.na(label) ~ label,
+                               TRUE ~ term))
 
     # split the reg_table into coefficients and indicator rows
     reg_table_x <-
@@ -120,7 +128,13 @@ x_fe_master <- function(regs, var_labels = NULL, var_indicates = NULL, var_omits
       spread(key = reg_number, value = value, sep = "_", fill = "") %>%
       # order everything based on labels
       mutate(order2 = row_number()) %>%
-      left_join(var_labels %>% distinct(label) %>% mutate(order1 = row_number()), by = "label") %>%
+      left_join(var_labels %>%
+                  bind_rows() %>%
+                  gather() %>%
+                  rename(label = key, term = value) %>%
+                  distinct(label) %>%
+                  mutate(order1 = row_number()),
+                by = "label") %>%
       arrange(order1, order2) %>%
       select(-order1, -order2) %>%
       mutate(label = if_else(beta_se == "estimate_star", label, "")) %>%

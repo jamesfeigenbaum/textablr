@@ -40,3 +40,4 @@ term  <- NULL
 value <- NULL
 var <- NULL
 term.x <- NULL
+key <- NULL
