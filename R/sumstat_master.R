@@ -5,8 +5,9 @@
 #' @param regs stored regression output in a list
 #' @param sumstat_include vector of summary statistics to include
 #' @param sumstat_format tibble from the lookup with summary stats and proper names
+#' @param cluster_names named vector of cluster SE variables
 #'
-#' @importFrom purrr map_dfr map_int map_dbl map2 map_chr
+#' @importFrom purrr map_dfr map_int map_dbl map2 map_chr map2_dfr
 #' @importFrom broom glance
 #' @importFrom dplyr pull filter arrange row_number bind_cols everything
 #' @importFrom tidyr spread gather
@@ -14,7 +15,7 @@
 #' @keywords internal
 
 sumstat_master <- function(regs, sumstat_include = c("nobs", "adj.r.squared", "Ymean"),
-                           sumstat_format, cluster_labels) {
+                           sumstat_format, cluster_names) {
 
   # summary statistics
   # all with the prefix sumstat_
@@ -26,8 +27,11 @@ sumstat_master <- function(regs, sumstat_include = c("nobs", "adj.r.squared", "Y
   # and because some summary stats don't always exist for all regression types
   # but not needed for the summary stats in broom::glance
 
-  # if the summary stats are unnamed, used the defaults
-  if (sumstat_include %>% names() %>% is.null()) {
+  # if any of the summary stats are unnamed, used the defaults for all
+  # TODO fix this at some point
+  if (sumstat_include %>% names() %>% map_lgl(magrittr::equals, "") %>% sum() > 0 |
+      sumstat_include %>% names() %>% is.null()) {
+
     sumstat_include <-
       set_names(sumstat_include,
                 sumstat_format %>%
@@ -106,17 +110,43 @@ sumstat_master <- function(regs, sumstat_include = c("nobs", "adj.r.squared", "Y
 
   }
 
-  out_sumstats <- sumstat_storage %>%
+  if ("clusters" %in% sumstat_include) {
+
+    sumstat_storage <- sumstat_storage %>%
+      mutate(clusters = TRUE)
+
+  }
+
+  out_sumstats_tbl <- sumstat_storage %>%
     select(sumstat_include) %>%
     # surround with \multicolumn{1}{c}{XXX}
-    map2(sumstat_format %>%
+    map2_dfr(sumstat_format %>%
            filter(code %in% sumstat_include) %>%
            arrange(match(code, sumstat_include)) %>%
            pull(format),
-         ~ sprintf(fmt = .y, .x)) %>%
+         ~ sprintf(fmt = .y, .x))
+
+  # this is the point to pop in the cluster list, if one exists
+  if ("clusters" %in% sumstat_include) {
+
+    # get the cluster list
+    out_clusters <-
+      cluster_master(regs, cluster_names)
+
+    cluster_index <- match("clusters", sumstat_include)
+
+    out_sumstats_tbl <- bind_cols(
+      out_sumstats_tbl[1:(cluster_index - 1)],
+      out_clusters,
+      out_sumstats_tbl[(cluster_index + 1):length(out_sumstats_tbl)])
+
+  }
+
+  out_sumstats <- out_sumstats_tbl %>%
+    as.list() %>%
     map_chr(paste0, collapse = " & ") %>%
     str_c(" \\\\") %>%
-    paste(names(sumstat_include), ., sep = " & ")
+    paste(names(out_sumstats_tbl), ., sep = " & ")
 
   return(out_sumstats)
 

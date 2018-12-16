@@ -17,7 +17,7 @@
 
 # summary stat lookup
 sumstat_format_default <-
-    data.frame(code = c("nobs", "Ymean", "r.squared", "adj.r.squared", "df", "statistic", "Ysd", "APF", "N_clusters"),
+    data.frame(code = c("nobs", "Ymean", "r.squared", "adj.r.squared", "df", "statistic", "Ysd", "APF", "clusters"),
              format = c("%.0f", "%.2f", "%.2f", "%.2f", "%.0f", "%.2f", "%.2f", "%.2f", "%.0f"),
              proper_name = c("Observations", "Y Mean",
                              "R$^{2}$", "Adjusted R$^{2}$",

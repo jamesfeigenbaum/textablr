@@ -8,7 +8,7 @@ textablr_estout(regs, file = "", var_labels = NULL, var_omits = NULL,
   var_indicates = NULL, sumstat_include = sumstat_include_default,
   sumstat_format = sumstat_format_default,
   star_levels = star_level_default, beta_digits = 2,
-  se_digits = beta_digits, cluster_labels = NULL)
+  se_digits = beta_digits, cluster_names = NULL)
 }
 \arguments{
 \item{regs}{stored regression output in a list}
@@ -43,7 +43,7 @@ Make this NULL for no stars at all}
 
 \item{se_digits}{3 or 3.1 or 3.14 or 3.146 or 3.1459... default is whatever beta_digits is}
 
-\item{cluster_labels}{tibble of labels for cluster SE variables (one or multi-way clustering)}
+\item{cluster_names}{named vector for cluster SE variables (one or multi-way clustering)}
 }
 \description{
 Like stata's `estout`, output regression results nicely.

@@ -41,3 +41,6 @@ value <- NULL
 var <- NULL
 term.x <- NULL
 key <- NULL
+clustervar <- NULL
+cluster_name <- NULL
+cluster_k <- NULL
