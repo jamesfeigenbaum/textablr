@@ -53,6 +53,11 @@ var_indicates <- c("Region FE" = "region", "Race and South Controls" = "black|so
 textablr_estout(regs, var_labels = var_labels, var_omits = "(Intercept)", var_indicates = var_indicates,
                 sumstat_include = sumstat_include)
 
+var_indicates <- c("Region FE" = "region")
+
+textablr_estout(regs, var_labels = var_labels, var_omits = "(Intercept)", var_indicates = var_indicates,
+                sumstat_include = sumstat_include)
+
 ## Clustering
 
 nls <- "http://www.stata-press.com/data/r14/nlswork.dta" %>%

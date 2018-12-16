@@ -76,6 +76,7 @@ x_fe_master <- function(regs, var_labels = NULL, var_indicates = NULL, var_omits
       filter(is.na(omit)) %>%
       # check against indicator regexs
       regex_full_join(var_indicates, by = "term") %>%
+      filter(!is.na(reg_number)) %>%
       # give term as the label for rows without a label given
       mutate(term = term.x) %>%
       mutate(label = case_when(!is.na(label) ~ label,
