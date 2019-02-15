@@ -25,7 +25,7 @@ textablr_get_sumstat_format <- function() {
                                "Y Std Dev",
                                "Angrist-Pischke F-Stat"),
                format = c("%.0f", "%.2f", "%.2f", "%.2f", "%.0f", "%.2f", "%.2f", "%.2f")) %>%
-    dplyr::mutate(format = format %>% paste0("\\\\multicolumn{1}{c}{", ., "}"))' %>% write_clip()
+    dplyr::mutate(format = format %>% paste0("\\\\multicolumn{1}{c}{", ., "}"))' %>% write_clip(allow_non_interactive = TRUE)
 
   print("The sumstat_format definition is now in your clipboard. Don't change the code variable!")
 }
@@ -35,7 +35,7 @@ textablr_get_sumstat_format <- function() {
 # summary statistic names and formats
 textablr_get_var_indicates <- function() {
 
-  'var_indicates <- tibble::tibble(term = c("am", "cyl"), indicator = c("Transmission FE", "Cylinders FE"))' %>% write_clip()
+  'var_indicates <- tibble::tibble(term = c("am", "cyl"), indicator = c("Transmission FE", "Cylinders FE"))' %>% write_clip(allow_non_interactive = TRUE)
 
   print("A tibble for variable indicating is now in your clipboard")
 }
@@ -47,7 +47,7 @@ textablr_get_cluster_labels <- function() {
 
   'cluster_labels <- tibble::tibble(term = c("state", "year"),
                           proper_name = c("Clusters(State)", "Clusters(Year)")) %>%
-    dplyr::mutate(term = paste0("cluster_name_", term))' %>% write_clip()
+    dplyr::mutate(term = paste0("cluster_name_", term))' %>% write_clip(allow_non_interactive = TRUE)
 
   print("A tibble for cluster labelling is now in your clipboard")
 

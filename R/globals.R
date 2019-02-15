@@ -26,6 +26,7 @@ felm_fe  <- NULL
 indicator <- NULL
 label <- NULL
 omit <- NULL
+order0 <- NULL
 order1 <- NULL
 order2 <- NULL
 p.value <- NULL

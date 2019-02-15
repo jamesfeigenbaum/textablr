@@ -128,16 +128,15 @@ x_fe_master <- function(regs, var_labels = NULL, var_indicates = NULL, var_omits
       gather(key = "beta_se", value = "value", -reg_number, -label) %>%
       spread(key = reg_number, value = value, sep = "_", fill = "") %>%
       # order everything based on labels
+      # if a variable is not in var_labels... alphabetical
       mutate(order2 = row_number()) %>%
       left_join(var_labels %>%
-                  bind_rows() %>%
-                  gather() %>%
-                  rename(label = key, term = value) %>%
-                  distinct(label) %>%
                   mutate(order1 = row_number()),
                 by = "label") %>%
-      arrange(order1, order2) %>%
-      select(-order1, -order2) %>%
+      # if the intercept is around, make it first
+      mutate(order0 = if_else(label == "(Intercept)", 1, 2)) %>%
+      arrange(order0, order1, order2) %>%
+      select(-order0, -order1, -order2, -term) %>%
       mutate(label = if_else(beta_se == "estimate_star", label, "")) %>%
       mutate(line_ender = if_else(beta_se == "estimate_star", "\\\\", "\\\\ \\addlinespace")) %>%
       select(-beta_se) %>%
