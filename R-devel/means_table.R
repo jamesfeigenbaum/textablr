@@ -2,8 +2,12 @@
 #'
 #' @description Output summary stats results nicely.
 #'
-#' @param data the data...
-#' @param vars a named vector of variables to include, names are the labels
+#' @param data the data
+#' @param var_labels named vector of variable labels.
+#'     This is required
+#'     For example, to get summaries of the `educ` variable `Education` and the `expr` variable `Experience`
+#'     make this `c("Education" = "educ", "Experience" = "expr")`
+#'     Note: this also sets the order of variables in the table
 #' @param group_var the variable (if any) to group on
 #' @param group_condition the filter on the group_var
 #'
@@ -20,22 +24,22 @@
 #'
 #' @export textablr_mean_col
 #' @export textablr_diff_col
-
-# play with mtcars
-
-# two tasks:
-# taking the means of a group
-# comparing means across groups
+#' @export textablr_means
 
 # means
 
-textablr_mean_col <- function(data, vars, group_var, group_condition){
+textablr_mean_col <- function(data, vars, group_var = NULL, group_condition = NULL){
 
   vars1 <- vars
 
+  if (is.null(group_var)) {
+    data_filtered <- data
+  } else {
+    data_filtered <- filter(!!rlang::sym(group_var) %in% group_condition)
+  }
+
   means <-
-    data %>%
-    filter(!!rlang::sym(group_var) %in% group_condition) %>%
+    data_filtered %>%
     select(vars1) %>%
     summarize_all(c("mean", "sd")) %>%
     gather() %>%
@@ -54,8 +58,7 @@ textablr_mean_col <- function(data, vars, group_var, group_condition){
     select(label = key, value)
 
   n <-
-    data %>%
-    filter(!!rlang::sym(group_var) %in% group_condition) %>%
+    data_filtered %>%
     nrow() %>%
     sprintf("%d", .) %>%
     as_tibble() %>%

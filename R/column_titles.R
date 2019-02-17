@@ -19,7 +19,7 @@
 #' c_title <- c("Male", "Female")
 #' c_widths <- c(3, 3)
 #'
-#' textablr_column_names_for_tex(column_titles = c_title, column_widths = c_widths)
+#' # textablr_column_names_for_tex(column_titles = c_title, column_widths = c_widths)
 #'
 #' @export textablr_column_names_for_tex
 

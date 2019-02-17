@@ -45,3 +45,5 @@ key <- NULL
 clustervar <- NULL
 cluster_name <- NULL
 cluster_k <- NULL
+dummy <- NULL
+reg <- NULL

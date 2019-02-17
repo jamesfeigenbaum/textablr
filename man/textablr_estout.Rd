@@ -6,8 +6,9 @@
 \usage{
 textablr_estout(regs, file = "", var_labels = NULL, var_omits = NULL,
   var_indicates = NULL, sumstat_include = sumstat_include_default,
-  sumstat_format = sumstat_format_default, star_levels = star_level_default,
-  beta_digits = 2, se_digits = beta_digits, cluster_names = NULL)
+  sumstat_format = sumstat_format_default,
+  star_levels = star_level_default, beta_digits = 2,
+  se_digits = beta_digits, cluster_names = NULL)
 }
 \arguments{
 \item{regs}{stored regression output in a list}
