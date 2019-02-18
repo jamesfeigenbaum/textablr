@@ -25,6 +25,31 @@ var_omits <- c("(Intercept)")
 var_indicates <- c("Cylinders FE" = "cyl", "Transmission FE" = "am")
 
 # which summary stats to include?
-sumstat_include <- c("nobs", "adj.r.squared", "Ymean")
+sumstat_include <- c("nobs", "adj.r.squared", "Ymean", "Ysd")
 
 textablr_estout(regs, file = "latex_testing/table1_NEW.tex", var_labels, var_omits, var_indicates, sumstat_include)
+
+####
+
+# y mean not working with probit and logit etc
+
+gtcars %>%
+  mutate(euro = ctry_origin %in% c("Germany", "Italy", "United Kingdom")) %>%
+  count(euro)
+
+reg1 <- gtcars %>%
+  mutate(euro = ctry_origin %in% c("Germany", "Italy", "United Kingdom")) %>%
+  lm(data = ., euro ~ hp + msrp)
+
+reg2 <- gtcars %>%
+  mutate(euro = ctry_origin %in% c("Germany", "Italy", "United Kingdom")) %>%
+  glm(data = ., euro ~ hp + msrp, family = binomial(link = "logit"))
+
+reg3 <- gtcars %>%
+  mutate(euro = ctry_origin %in% c("Germany", "Italy", "United Kingdom")) %>%
+  glm(data = ., euro ~ hp + msrp, family = binomial(link = "probit"))
+
+regs <- list(reg1, reg2, reg3)
+
+textablr_estout(regs, sumstat_include = sumstat_include)
+

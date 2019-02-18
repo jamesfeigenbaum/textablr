@@ -11,7 +11,7 @@
 #' @importFrom broom glance
 #' @importFrom dplyr pull filter arrange row_number bind_cols everything
 #' @importFrom tidyr spread gather
-#' @importFrom stats sd nobs
+#' @importFrom stats sd nobs model.frame
 #' @keywords internal
 
 sumstat_master <- function(regs, sumstat_include = c("nobs", "adj.r.squared", "Ymean"),
@@ -48,10 +48,15 @@ sumstat_master <- function(regs, sumstat_include = c("nobs", "adj.r.squared", "Y
   regs_glance <- regs %>% map_dfr(glance)
 
   y_vector <- regs %>%
-    map(~ tibble(resid = .x$residuals %>% as.vector(),
-                 fitted = .x$fitted.values %>% as.vector(),
-                 y = resid + fitted)) %>%
-    map(pull)
+    map(model.frame) %>%
+    map(pull, var = 1)
+
+  # below only works if the models are all linear regressions...
+  # y_vector <- regs %>%
+  #   map(~ tibble(resid = .x$residuals %>% as.vector(),
+  #                fitted = .x$fitted.values %>% as.vector(),
+  #                y = resid + fitted)) %>%
+  #   map(pull)
 
   # anything in regs_glance is EASY!
   sumstat_storage <-
