@@ -37,33 +37,29 @@
 
 textablr_means <- function(..., file = "") {
 
-  temp <-
+  out_table <-
     bind_cols(...) %>%
     select(label, starts_with("value")) %>%
     gt()
 
-  temp %>%
+  out_table %>%
     tab_header("Means and Differences") %>%
     cols_align("center") %>%
     print()
-
-  out_table <-
-    temp %>%
-    as_latex() %>%
-    str_split("\n") %>%
-    unlist() %>%
-    .[(str_which(., "midrule") + 1):(str_which(., "bottomrule") - 1)]
 
   # if file is empty don't cat to a file at all
   if (file != "") {
 
     out_table %>%
-      # if the following row has a midrule, remove the previous addlinespace
+      as_latex() %>%
+      str_split("\n") %>%
+      unlist() %>%
+      .[(str_which(., "midrule") + 1):(str_which(., "bottomrule") - 1)] %>%
       paste0(collapse = "\n") %>%
-      # str_replace_all("\\\\addlinespace(\n.+midrule)", "\\1") %>%
       cat(file = file)
 
   }
 
+  return("See the summary table in the viewer")
 
 }

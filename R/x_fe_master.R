@@ -119,7 +119,10 @@ x_fe_master <- function(regs, var_labels = NULL, var_indicates = NULL, var_omits
       mutate(estimate_string = estimate %>%
                sprintf(beta_fmt, .)) %>%
       mutate(estimate_star = if_else(sig_stars == 0, estimate_string,
-                                     paste0(estimate_string, "\\sym{", strrep("*", sig_stars), "}")
+                                     paste0(estimate_string, strrep("*", sig_stars))
+      # mutate(estimate_star = if_else(sig_stars == 0, estimate_string,
+      #                                paste0(estimate_string, "\\sym{", strrep("*", sig_stars), "}")
+
       )) %>%
       # add parentheses to SE
       # TODO use options for SE or t or pvalue
@@ -138,12 +141,7 @@ x_fe_master <- function(regs, var_labels = NULL, var_indicates = NULL, var_omits
       arrange(order0, order1, order2) %>%
       select(-order0, -order1, -order2, -term) %>%
       mutate(label = if_else(beta_se == "estimate_star", label, "")) %>%
-      mutate(line_ender = if_else(beta_se == "estimate_star", "\\\\", "\\\\ \\addlinespace")) %>%
-      select(-beta_se) %>%
-      map(magrittr::extract) %>%
-      purrr::transpose() %>%
-      map_chr(paste0, collapse = " & ") %>%
-      str_replace("& \\\\", "\\\\")
+      select(-beta_se)
 
     if (reg_table_fe %>% nrow() != 0) {
 
@@ -157,7 +155,8 @@ x_fe_master <- function(regs, var_labels = NULL, var_indicates = NULL, var_omits
         mutate(value = case_when(count == 0 ~ indicator_levels[2],
                                  count > 0 ~ indicator_levels[1])) %>%
         # surround with \multicolumn{1}{c}{XXX}
-        mutate(value = value %>% sprintf("\\multicolumn{1}{c}{%s}", .)) %>%
+        # actually don't we'll do this later after we gt it
+        # mutate(value = value %>% sprintf("\\multicolumn{1}{c}{%s}", .)) %>%
         select(-count) %>%
         ungroup() %>%
         spread(key = reg_number, value = value, sep = "_", fill = "") %>%
@@ -165,18 +164,17 @@ x_fe_master <- function(regs, var_labels = NULL, var_indicates = NULL, var_omits
         left_join(var_indicates %>% select(indicator) %>% mutate(order = row_number()), by = "indicator") %>%
         arrange(order) %>%
         select(-order) %>%
-        map(magrittr::extract) %>%
-        purrr::transpose() %>%
-        map_chr(paste0, collapse = " & ") %>%
-        map_chr(paste, "\\\\ \\addlinespace")
+        rename(label = indicator)
 
     }
 
     if (reg_table_fe %>% nrow() == 0) {
       out_x %>%
+        mutate(table_part = "x") %>%
         return()
     } else {
-      c(out_x, out_fe) %>%
+      bind_rows(out_x %>% mutate(table_part = "x"),
+                out_fe %>% mutate(table_part = "fe")) %>%
         return()
     }
 

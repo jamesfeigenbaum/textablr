@@ -41,7 +41,7 @@ fs4 <- card1995 %>%
 # Regression Table
 
 # regs <- list(ols, iv1, iv2, iv3, fs1, fs2, fs3)
-regs <- list(ols, iv1, iv2, iv3, iv4)
+regs <- list(ols, fs1, iv1)
 
 var_labels <- c("Education" = "educ", "Education IV" = "`educ(fit)`",
                 "Near 4Year College" = "nearc4", "Near 2Year College" = "nearc2")

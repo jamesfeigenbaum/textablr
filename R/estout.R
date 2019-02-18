@@ -3,7 +3,7 @@
 #' @description Like stata's `estout`, output regression results nicely.
 #'
 #' @param regs stored regression output in a list
-#' @param file output location, if blank prints to screen
+#' @param file output location, if blank only prints to viewer
 #' @param var_labels named vector of variable labels.
 #'     For example, to label the `educ` variable `Education` and the `expr` variable `Experience`
 #'     make this `c("Education" = "educ", "Experience" = "expr")`
@@ -27,8 +27,9 @@
 #' @param cluster_names named vector for cluster SE variables (one or multi-way clustering)
 #'
 #' @import magrittr
+#' @import gt
 #' @importFrom purrr map map_chr transpose
-#' @importFrom stringr str_c str_replace_all
+#' @importFrom stringr str_c str_replace_all str_replace str_which str_detect str_split
 #'
 #' @examples
 #'
@@ -88,42 +89,82 @@ textablr_estout <- function(regs, file = "",
     as.character()
 
   # summary statistics
-  out_sumstats <- sumstat_master(regs, sumstat_include, sumstat_format, cluster_names)
+  out_sumstats <- sumstat_master(regs, sumstat_include, sumstat_format, cluster_names) %>%
+    mutate(table_part = "summary")
 
   # coefficients and FEs
   out_x_fe <- x_fe_master(regs, var_labels, var_indicates, var_omits, star_levels, beta_digits, se_digits)
-
-  # column numbers for output
-  out_colnumbers <- 1:reg_columns %>%
-    # surround with \multicolumn{1}{c}{XXX}
-    sprintf("\\multicolumn{1}{c}{(%s)}", .) %>%
-    map(magrittr::extract) %>%
-    purrr::transpose() %>%
-    map_chr(paste0, collapse = " & ") %>%
-    str_c("& ", ., " \\\\")
+  # table part is defined in x_fe_master
 
   # and put the whole output table together
-  out_table <- c(
-    out_colnumbers,
-    "\\midrule",
-    out_x_fe,
-    "\\midrule",
-    out_sumstats)
+  # TODO
+  # i used to put midrules between column numbers and xfe
+  # and between xfe and sumstats
+  out_table <- bind_rows(out_x_fe, out_sumstats) %>%
+    # convert reg number variable names to proper titles
+    set_names(c(" ", sprintf("(%d)", 1:reg_columns), "table_part")) %>%
+    gt()
+
+  out_table %>%
+    tab_header("Regressions") %>%
+    cols_align("center") %>%
+    cols_hide("table_part") %>%
+    print()
 
   # if file is empty don't cat to a file at all
   if (file != "") {
 
+    # which cells to put in multicolumn?
+    # if the string starts with this then...
+
+    fe_labels <-
+      out_table %>%
+      as_tibble() %>%
+      filter(table_part %in% c("fe")) %>%
+      pull(" ") %>%
+      paste0(collapse = "|") %>%
+      str_c("|incasefeisblank")
+
+    summary_labels <-
+      out_table %>%
+      as_tibble() %>%
+      filter(table_part %in% c("summary")) %>%
+      pull(" ") %>%
+      paste0(collapse = "|") %>%
+      str_c("|incasesummaryisblank")
+
     out_table %>%
-      # if the following row has a midrule, remove the previous addlinespace
+      cols_hide("table_part") %>%
+      as_latex() %>%
+      str_split("\n") %>%
+      unlist() %>%
+      .[(str_which(., "toprule") + 1):(str_which(., "bottomrule") - 1)] %>%
+      tibble(tex = .) %>%
+      # put multicolumn around summary and fes
+      # and put multicolumn around reg numbers at top
+      mutate(tex = if_else(str_detect(tex, summary_labels) |
+                             str_detect(tex, fe_labels) |
+                             str_detect(tex, "& \\(1\\) &"),
+                           str_replace_all(tex, "& ([^&\\\\]+) ", "& \\\\multicolumn{1}{c}{\\1} "),
+                           tex)) %>%
+      # addlinespace at the end of any SE rows or FE rows
+      mutate(tex = if_else(str_detect(tex, "^ &") & str_detect(tex, "\\([0-9]+\\.[0-9]+\\)"),
+                          str_c(tex, "\\addlinespace"),
+                          tex)) %>%
+      mutate(tex = if_else(str_detect(tex, fe_labels),
+                    str_c(tex, "\\addlinespace"),
+                    tex)) %>%
+      pull(tex) %>%
       paste0(collapse = "\n") %>%
-      str_replace_all("\\\\addlinespace(\n.+midrule)", "\\1") %>%
+      # put stars in \sym{}
+      str_replace_all("(\\*+)", "\\\\sym{\\1}") %>%
+      # put midrule between FE and sum stats
+      # replace not replace all because only one
+      str_replace(summary_labels, "\\\\midrule\n \\0") %>%
       cat(file = file)
 
   }
 
-  markdown_table <- tex_to_markdown(out_table) %>%
-    cat(sep = "\n")
-
-  invisible(out_table)
+  return("Regression table made. See the viewer")
 
 }

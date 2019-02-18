@@ -47,3 +47,5 @@ cluster_name <- NULL
 cluster_k <- NULL
 dummy <- NULL
 reg <- NULL
+table_part <- NULL
+tex <- NULL

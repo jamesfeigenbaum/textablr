@@ -13,7 +13,7 @@ textablr_estout(regs, file = "", var_labels = NULL, var_omits = NULL,
 \arguments{
 \item{regs}{stored regression output in a list}
 
-\item{file}{output location, if blank prints to screen}
+\item{file}{output location, if blank only prints to viewer}
 
 \item{var_labels}{named vector of variable labels.
 For example, to label the `educ` variable `Education` and the `expr` variable `Experience`

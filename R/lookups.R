@@ -7,6 +7,7 @@
 #' @param NULL
 #'
 #' @importFrom dplyr mutate
+#' @importFrom tibble tibble
 #' @import magrittr
 #'
 #' @keywords internal
@@ -17,15 +18,15 @@
 
 # summary stat lookup
 sumstat_format_default <-
-    data.frame(code = c("nobs", "Ymean", "r.squared", "adj.r.squared", "df", "statistic", "Ysd", "APF", "clusters"),
-             format = c("%.0f", "%.2f", "%.2f", "%.2f", "%.0f", "%.2f", "%.2f", "%.2f", "%.0f"),
-             proper_name = c("Observations", "Y Mean",
-                             "R$^{2}$", "Adjusted R$^{2}$",
-                             "Degrees of Freedom", "F-Statistic",
-                             "Y Std Dev",
-                             "Angrist-Pischke F-Stat",
-                             "Number of Clusters")) %>%
-  dplyr::mutate(format = format %>% paste0("\\multicolumn{1}{c}{", ., "}"))
+    tibble(code = c("nobs", "Ymean", "r.squared", "adj.r.squared", "df", "statistic", "Ysd", "APF", "clusters"),
+           format = c("%.0f", "%.2f", "%.2f", "%.2f", "%.0f", "%.2f", "%.2f", "%.2f", "%.0f"),
+           proper_name = c("Observations", "Y Mean",
+                           "R2", "Adjusted R2",
+                           "Degrees of Freedom", "F-Statistic",
+                           "Y Std Dev",
+                           "Angrist-Pischke F-Stat",
+                           "Number of Clusters"))
+  # dplyr::mutate(format = format %>% paste0("\\multicolumn{1}{c}{", ., "}"))
 
 ## DEFAULTS
 

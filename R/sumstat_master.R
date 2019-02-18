@@ -119,7 +119,6 @@ sumstat_master <- function(regs, sumstat_include = c("nobs", "adj.r.squared", "Y
 
   out_sumstats_tbl <- sumstat_storage %>%
     select(sumstat_include) %>%
-    # surround with \multicolumn{1}{c}{XXX}
     map2_dfr(sumstat_format %>%
            filter(code %in% sumstat_include) %>%
            arrange(match(code, sumstat_include)) %>%
@@ -142,11 +141,13 @@ sumstat_master <- function(regs, sumstat_include = c("nobs", "adj.r.squared", "Y
 
   }
 
+  col_names <- sprintf("reg_number_%d", 1:length(regs)) %>%
+    c("label", .)
+
   out_sumstats <- out_sumstats_tbl %>%
-    as.list() %>%
-    map_chr(paste0, collapse = " & ") %>%
-    str_c(" \\\\") %>%
-    paste(names(out_sumstats_tbl), ., sep = " & ")
+    t() %>%
+    as_tibble(rownames = "label") %>%
+    set_names(col_names)
 
   return(out_sumstats)
 
