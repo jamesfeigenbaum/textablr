@@ -33,9 +33,9 @@ remotes::install_github("rstudio/gt")
 
 ### Summary Tables
 
-- Two basic types of column. 
-    1. Means and SDs of various variables either overall or within a subgroup. 
-    2. Differences and SEs between means of variables between two specificed subgroups.
+- Two basic types of column:
+  1. Means and SDs of various variables either overall or within a subgroup. 
+  2. Differences and SEs between means of variables between two specificed subgroups.
 
 ### To Do
 
