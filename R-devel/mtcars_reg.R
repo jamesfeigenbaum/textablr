@@ -9,9 +9,6 @@ reg4 <- mtcars %>% lm(data = ., mpg ~ wt + hp + am + as.factor(cyl))
 reg5 <- mtcars %>% lm(data = ., wt ~ hp)
 reg6 <- mtcars %>% lfe::felm(data = ., wt ~ hp | cyl + am)
 
-# function will take regressions as a list of list objects
-regs <- list(reg1, reg2, reg3, reg4, reg5, reg6)
-
 # and a named vector of variable labels (optional)
 var_labels <- c("Horsepower" = "hp", "Weight" = "wt")
 # when labelling an instrumental variable in felm syntax
@@ -25,9 +22,15 @@ var_omits <- c("(Intercept)")
 var_indicates <- c("Cylinders FE" = "cyl", "Transmission FE" = "am")
 
 # which summary stats to include?
-sumstat_include <- c("nobs", "adj.r.squared", "Ymean", "Ysd")
+sumstat_include <- c("nobs", "adj.r.squared", "Ymean")
 
-textablr_estout(regs, file = "latex_testing/table1_NEW.tex", var_labels, var_omits, var_indicates, sumstat_include)
+textablr_estout(reg1, reg2, reg3, reg4, reg5, reg6,
+                file = "latex_testing/table1_NEW.tex",
+                var_labels = var_labels,
+                var_omits = var_omits,
+                var_indicates = var_indicates,
+                sumstat_include = sumstat_include,
+                column_numbers = FALSE)
 
 ####
 

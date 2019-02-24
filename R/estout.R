@@ -2,7 +2,7 @@
 #'
 #' @description Like stata's `estout`, output regression results nicely.
 #'
-#' @param regs stored regression output in a list
+#' @param ... stored regression output
 #' @param file output location, if blank only prints to viewer
 #' @param var_labels named vector of variable labels.
 #'     For example, to label the `educ` variable `Education` and the `expr` variable `Experience`
@@ -42,9 +42,6 @@
 #' reg5 <- mtcars %>% lm(data = ., wt ~ hp)
 #' reg6 <- mtcars %>% lfe::felm(data = ., wt ~ hp | cyl + am)
 #'
-#' # function will take regressions as a list of list objects
-#' regs <- list(reg1, reg2, reg3, reg4, reg5, reg6)
-#'
 #' # and a named vector of variable labels (optional)
 #' var_labels <- c("Weight" = "wt", "Horsepower" = "hp")
 #' # when labelling an instrumental variable in felm syntax
@@ -60,16 +57,20 @@
 #' # which summary stats to include?
 #' sumstat_include <- c("nobs", "adj.r.squared", "Ymean")
 #'
-#' # textablr_estout(regs, file = "", var_labels, var_omits, var_indicates, sumstat_include)
+#' # textablr_estout(reg1, reg2, reg3, reg4, reg5, reg6,
+#' #   file = "", var_labels = var_labels, var_omits = var_omits,
+#' #   var_indicates = var_indicates, sumstat_include = sumstat_include)
 #'
 #' @export textablr_estout
 
-textablr_estout <- function(regs, file = "",
+textablr_estout <- function(..., file = "",
                             var_labels = NULL, var_omits = NULL, var_indicates = NULL,
                             sumstat_include = sumstat_include_default, sumstat_format = sumstat_format_default,
                             star_levels = star_level_default,
                             beta_digits = 2, se_digits = beta_digits,
                             cluster_names = NULL) {
+
+  regs <- list(...)
 
   # we're going to extract some things right from regs
   # but other things from the list of summaries
@@ -159,8 +160,10 @@ textablr_estout <- function(regs, file = "",
       # put stars in \sym{}
       str_replace_all("(\\*+)", "\\\\sym{\\1}") %>%
       # put midrule between FE and sum stats
-      # replace not replace all because only one
+      # replace not replace all because only do first one
       str_replace(summary_labels, "\\\\midrule\n \\0") %>%
+      # and kill leading and trailing white space
+      str_trim() %>%
       cat(file = file)
 
   }

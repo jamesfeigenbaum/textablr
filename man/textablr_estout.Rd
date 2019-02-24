@@ -4,14 +4,14 @@
 \alias{textablr_estout}
 \title{Output Regression Results as a LaTeX Table}
 \usage{
-textablr_estout(regs, file = "", var_labels = NULL, var_omits = NULL,
+textablr_estout(..., file = "", var_labels = NULL, var_omits = NULL,
   var_indicates = NULL, sumstat_include = sumstat_include_default,
   sumstat_format = sumstat_format_default,
   star_levels = star_level_default, beta_digits = 2,
   se_digits = beta_digits, cluster_names = NULL)
 }
 \arguments{
-\item{regs}{stored regression output in a list}
+\item{...}{stored regression output}
 
 \item{file}{output location, if blank only prints to viewer}
 
@@ -59,9 +59,6 @@ reg4 <- mtcars \%>\% lm(data = ., mpg ~ wt + hp + am + as.factor(cyl))
 reg5 <- mtcars \%>\% lm(data = ., wt ~ hp)
 reg6 <- mtcars \%>\% lfe::felm(data = ., wt ~ hp | cyl + am)
 
-# function will take regressions as a list of list objects
-regs <- list(reg1, reg2, reg3, reg4, reg5, reg6)
-
 # and a named vector of variable labels (optional)
 var_labels <- c("Weight" = "wt", "Horsepower" = "hp")
 # when labelling an instrumental variable in felm syntax
@@ -77,6 +74,8 @@ var_indicates <- c("Transmission FE" = "am", "Cylinders FE" = "cyl")
 # which summary stats to include?
 sumstat_include <- c("nobs", "adj.r.squared", "Ymean")
 
-# textablr_estout(regs, file = "", var_labels, var_omits, var_indicates, sumstat_include)
+# textablr_estout(reg1, reg2, reg3, reg4, reg5, reg6,
+#   file = "", var_labels = var_labels, var_omits = var_omits,
+#   var_indicates = var_indicates, sumstat_include = sumstat_include)
 
 }
