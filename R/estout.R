@@ -162,6 +162,11 @@ textablr_estout <- function(..., file = "",
       # put midrule between FE and sum stats
       # replace not replace all because only do first one
       str_replace(summary_labels, "\\\\midrule\n \\0") %>%
+      # if there are any "\textbackslash" it is because
+      # long variable labels with \\s got converted
+      str_replace_all("textbackslash ", "\\\\") %>%
+      # and fix interaction symbols
+      str_replace_all("XINTERACTION", "$\\\\times$") %>%
       # and kill leading and trailing white space
       str_trim() %>%
       cat(file = file)

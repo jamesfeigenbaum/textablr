@@ -10,7 +10,7 @@ reg5 <- mtcars %>% lm(data = ., wt ~ hp)
 reg6 <- mtcars %>% lfe::felm(data = ., wt ~ hp | cyl + am)
 
 # and a named vector of variable labels (optional)
-var_labels <- c("Horsepower" = "hp", "Weight" = "wt")
+var_labels <- c("A long variable \\ name needs a new line" = "hp", "Weight XINTERACTION Blah" = "wt")
 # when labelling an instrumental variable in felm syntax
 # the term should be "`x(fit)`" including the backticks
 # if x is instrumented for by some z
@@ -29,8 +29,7 @@ textablr_estout(reg1, reg2, reg3, reg4, reg5, reg6,
                 var_labels = var_labels,
                 var_omits = var_omits,
                 var_indicates = var_indicates,
-                sumstat_include = sumstat_include,
-                column_numbers = FALSE)
+                sumstat_include = sumstat_include)
 
 ####
 
