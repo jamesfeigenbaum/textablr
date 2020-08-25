@@ -4,7 +4,9 @@
 \name{.}
 \alias{.}
 \title{Globals to trick compile complaints about things that are undefined}
-\format{An object of class \code{NULL} of length 0.}
+\format{
+An object of class \code{NULL} of length 0.
+}
 \usage{
 .
 }

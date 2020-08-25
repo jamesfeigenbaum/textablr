@@ -8,6 +8,7 @@ library(dplyr)
 library(broom)
 library(haven)
 library(fuzzyjoin)
+library(estimatr)
 
 # using lm, glm, and felm with `card 1995`
 card1995 <- "https://storage.googleapis.com/causal-inference-mixtape.appspot.com/card.dta" %>%
@@ -45,7 +46,6 @@ fs4 <- card1995 %>%
 # Regression Table
 
 # regs <- list(ols, iv1, iv2, iv3, fs1, fs2, fs3)
-regs <- list(ols, iv1, iv2, iv3, iv4)
 
 var_labels <- c("Education" = "educ", "Education IV" = "`educ(fit)`",
                 "Near 4Year College" = "nearc4", "Near 2Year College" = "nearc2")
@@ -54,7 +54,26 @@ sumstat_include <- c("N" = "nobs", "Ymean", "APF", "Ysd", "statistic")
 
 var_indicates <- c("Region FE" = "region", "Race and South Controls" = "black|south")
 
-textablr_estout(regs, var_labels = var_labels, var_omits = "(Intercept)", var_indicates = var_indicates)
+textablr_estout(ols, iv1, iv2, iv3, iv4, var_labels = var_labels, var_omits = "(Intercept)", var_indicates = var_indicates)
+
+# try with estimatr rather than felm
+# Regressions
+ols <- card1995 %>%
+  lm_robust(data = ., lwage ~ educ + exper + black + south + married + smsa)
+
+iv1 <- card1995 %>%
+  iv_robust(data = ., lwage ~ educ + exper + black + south + married + smsa |
+              nearc4 + exper + black + south + married + smsa)
+fs1 <- card1995 %>%
+  lm_robust(data = . , educ ~ nearc4 + exper + black + south + married + smsa)
+
+iv2 <- card1995 %>%
+  iv_robust(data = ., lwage ~ educ + exper + black + south + married + smsa |
+              nearc2 + exper + black + south + married + smsa)
+fs2 <- card1995 %>%
+  lm_robust(data = . , educ ~ nearc2 + exper + black + south + married + smsa)
+
+textablr_estout(ols, iv1, iv2, var_labels = var_labels, var_omits = "(Intercept)", var_indicates = var_indicates)
 
 # F-Stat
 

@@ -64,15 +64,6 @@ sumstat_master <- function(regs, sumstat_include = c("nobs", "adj.r.squared", "Y
     mutate(reg_number = row_number()) %>%
     select(reg_number, everything())
 
-  if ("N" %in% sumstat_include | "nobs" %in% sumstat_include) {
-    # nobs doesn't work for felm...
-    # but it does with fallback (wtf?)
-    sumstat_N <- map_int(regs, nobs, use.fallback = TRUE)
-    sumstat_storage <- sumstat_N %>%
-      tibble("nobs" = .) %>%
-      bind_cols(sumstat_storage, .)
-  }
-
   if ("Ymean" %in% sumstat_include) {
     # this doesn't work for felm
     # sumstat_Ymean <- map(regs, extract2, "model") %>%

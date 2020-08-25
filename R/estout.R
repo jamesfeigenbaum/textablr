@@ -8,6 +8,9 @@
 #'     For example, to label the `educ` variable `Education` and the `expr` variable `Experience`
 #'     make this `c("Education" = "educ", "Experience" = "expr")`
 #'     Note: this sets the order of variables in the table
+#'     Note: to get multiple line variable labels, just use `\\`
+#'     Note: to get the times symbol for interactions, use `XINTERACTION`
+#'     Neither of these will look very good in the gt output...
 #' @param var_indicates named vector of variables to indicate.
 #'     This sets of the order of indicator variables in the table
 #' @param var_omits vector of variables to omit
@@ -103,10 +106,10 @@ textablr_estout <- function(..., file = "",
   # and between xfe and sumstats
   out_table <- bind_rows(out_x_fe, out_sumstats) %>%
     # convert reg number variable names to proper titles
-    set_names(c(" ", sprintf("(%d)", 1:reg_columns), "table_part")) %>%
-    gt()
+    set_names(c(" ", sprintf("(%d)", 1:reg_columns), "table_part"))
 
   out_table %>%
+    gt() %>%
     tab_header("Regressions") %>%
     cols_align("center") %>%
     cols_hide("table_part") %>%
@@ -135,6 +138,7 @@ textablr_estout <- function(..., file = "",
       str_c("|incasesummaryisblank")
 
     out_table %>%
+      gt() %>%
       cols_hide("table_part") %>%
       as_latex() %>%
       str_split("\n") %>%

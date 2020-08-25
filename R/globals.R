@@ -7,10 +7,6 @@
 #'
 #' @keywords internal
 
-## LOOKUPS
-
-#' @rdname textablr_globals
-
 ## UNDEFINED GLOBAL VARIABLES
 
 # this isn't pretty but it should deal with that annoying note

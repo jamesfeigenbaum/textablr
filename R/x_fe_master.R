@@ -39,9 +39,11 @@ x_fe_master <- function(regs, var_labels = NULL, var_indicates = NULL, var_omits
     # make var_labels and var_indicates tibbles for easier use downstream
     # but easier for users to input named vectors
     var_labels <- var_labels %>%
-      tibble(term = ., label = names(.))
+      tibble(term = ., label = names(.)) %>%
+      unique()
     var_indicates <- var_indicates %>%
-      tibble(term = ., indicator = names(.))
+      tibble(term = ., indicator = names(.)) %>%
+      unique()
 
     # if var_omits is null, build dummy version
     if (is.null(var_omits)) {
@@ -63,8 +65,12 @@ x_fe_master <- function(regs, var_labels = NULL, var_indicates = NULL, var_omits
 
     # extract with tidy from broom package
     # merge on labels or omit codes and order
+    # once this is fixed in tidy.felm, I don't have to give it the robust option
+    # instead it will get robust from the felm object
+    # https://github.com/tidymodels/broom/issues/772
     reg_table <-
-      map_dfr(regs, tidy, .id = "reg_number", fe = FALSE, fe.error = FALSE) %>%
+      map_dfr(regs, tidy, .id = "reg_number",
+              fe = FALSE, fe.error = FALSE, robust = TRUE) %>%
       as_tibble() %>%
       mutate(reg_number = reg_number %>% as.numeric()) %>%
       left_join(var_labels, by = "term") %>%

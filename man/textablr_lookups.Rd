@@ -7,7 +7,15 @@
 \alias{indicator_levels}
 \alias{star_level_default}
 \title{A few simple lookup vectors and tibbles to help with regression output}
-\format{An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 9 rows and 3 columns.}
+\format{
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 9 rows and 3 columns.
+
+An object of class \code{character} of length 3.
+
+An object of class \code{character} of length 2.
+
+An object of class \code{numeric} of length 3.
+}
 \usage{
 sumstat_format_default
 

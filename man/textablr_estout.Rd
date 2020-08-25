@@ -4,11 +4,19 @@
 \alias{textablr_estout}
 \title{Output Regression Results as a LaTeX Table}
 \usage{
-textablr_estout(..., file = "", var_labels = NULL, var_omits = NULL,
-  var_indicates = NULL, sumstat_include = sumstat_include_default,
+textablr_estout(
+  ...,
+  file = "",
+  var_labels = NULL,
+  var_omits = NULL,
+  var_indicates = NULL,
+  sumstat_include = sumstat_include_default,
   sumstat_format = sumstat_format_default,
-  star_levels = star_level_default, beta_digits = 2,
-  se_digits = beta_digits, cluster_names = NULL)
+  star_levels = star_level_default,
+  beta_digits = 2,
+  se_digits = beta_digits,
+  cluster_names = NULL
+)
 }
 \arguments{
 \item{...}{stored regression output}
@@ -18,7 +26,10 @@ textablr_estout(..., file = "", var_labels = NULL, var_omits = NULL,
 \item{var_labels}{named vector of variable labels.
 For example, to label the `educ` variable `Education` and the `expr` variable `Experience`
 make this `c("Education" = "educ", "Experience" = "expr")`
-Note: this sets the order of variables in the table}
+Note: this sets the order of variables in the table
+Note: to get multiple line variable labels, just use `\\`
+Note: to get the times symbol for interactions, use `XINTERACTION`
+Neither of these will look very good in the gt output...}
 
 \item{var_omits}{vector of variables to omit}
 

@@ -4,8 +4,7 @@
 \alias{textablr_mean_col}
 \title{Helper Function for Summary Statistics as a LaTeX Table}
 \usage{
-textablr_mean_col(data, var_labels, group_var = NULL,
-  group_condition = NULL)
+textablr_mean_col(data, var_labels, group_var = NULL, group_condition = NULL)
 }
 \arguments{
 \item{data}{the data}
