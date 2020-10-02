@@ -65,12 +65,10 @@ x_fe_master <- function(regs, var_labels = NULL, var_indicates = NULL, var_omits
 
     # extract with tidy from broom package
     # merge on labels or omit codes and order
-    # once this is fixed in tidy.felm, I don't have to give it the robust option
-    # instead it will get robust from the felm object
-    # https://github.com/tidymodels/broom/issues/772
+    # tidy.felm gets the ses correct based on the felm model
     reg_table <-
       map_dfr(regs, tidy, .id = "reg_number",
-              fe = FALSE, fe.error = FALSE, robust = TRUE) %>%
+              fe = FALSE, fe.error = FALSE) %>%
       as_tibble() %>%
       mutate(reg_number = reg_number %>% as.numeric()) %>%
       left_join(var_labels, by = "term") %>%
